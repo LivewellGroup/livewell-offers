@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>艾旅 LIVEWELL — 全球免費住宿夜精選 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --black: #1C1C1C;
+    --white: #F5F1EC;
+    --gold: #C9B99A;
+    --gold-dark: #A89476;
+    --navy: #2C5F74;
+    --navy-dark: #1F4856;
+    --linen: #E2D9CE;
+    --teak: #7A6652;
+    --green: #1D9E75;
+    --green-dark: #0F6E56;
+    --border: rgba(28,28,28,0.12);
+    --border-strong: rgba(28,28,28,0.2);
+    --text-secondary: #5F5E5A;
+    --text-tertiary: #B4B2A9;
+    --bg-secondary: #F7F4F0;
+    --bg-cream: #EFE9E0;
+    --shadow-sm: 0 2px 12px rgba(28,28,28,0.06);
+    --shadow-md: 0 8px 32px rgba(28,28,28,0.1);
+    --shadow-lg: 0 20px 60px rgba(28,28,28,0.18);
+  }
+  
+  html, body { height: 100%; }
+  body {
+    font-family: 'Noto Serif TC', 'Songti TC', 'Georgia', serif;
+    background: linear-gradient(135deg, #2a2724 0%, #1a1816 100%);
+    color: var(--black);
+    overflow: hidden;
+    user-select: none;
+  }
+  .sans { font-family: -apple-system, 'Helvetica Neue', 'PingFang TC', sans-serif; }
+  
+  /* ── Book stage ── */
+  .book-stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 2400px;
+  }
+  
+  .book {
+    position: relative;
+    width: min(94vw, 920px);
+    height: min(88vh, 660px);
+    transform-style: preserve-3d;
+  }
+  
+  /* ── Page ── */
+  .page {
+    position: absolute;
+    inset: 0;
+    background: var(--white);
+    box-shadow: var(--shadow-lg);
+    border-radius: 4px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .page.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 5;
+  }
+  .page.flipping-out {
+    animation: flipOut 0.6s ease forwards;
+    transform-origin: left center;
+    z-index: 6;
+  }
+  .page.flipping-in {
+    animation: flipIn 0.6s ease forwards;
+    transform-origin: left center;
+    z-index: 5;
+  }
+  .page.flipping-out-back {
+    animation: flipOutBack 0.6s ease forwards;
+    transform-origin: right center;
+    z-index: 6;
+  }
+  .page.flipping-in-back {
+    animation: flipInBack 0.6s ease forwards;
+    transform-origin: right center;
+    z-index: 5;
+  }
+  @keyframes flipOut {
+    0% { transform: rotateY(0); opacity: 1; }
+    100% { transform: rotateY(-180deg); opacity: 0; }
+  }
+  @keyframes flipIn {
+    0% { transform: rotateY(180deg); opacity: 0; }
+    100% { transform: rotateY(0); opacity: 1; }
+  }
+  @keyframes flipOutBack {
+    0% { transform: rotateY(0); opacity: 1; }
+    100% { transform: rotateY(180deg); opacity: 0; }
+  }
+  @keyframes flipInBack {
+    0% { transform: rotateY(-180deg); opacity: 0; }
+    100% { transform: rotateY(0); opacity: 1; }
+  }
+  
+  .page-inner {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 3rem 3.5rem 2rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--text-tertiary) transparent;
+  }
+  .page-inner::-webkit-scrollbar { width: 6px; }
+  .page-inner::-webkit-scrollbar-track { background: transparent; }
+  .page-inner::-webkit-scrollbar-thumb { background: var(--text-tertiary); border-radius: 3px; }
+  
+  /* ── Cover (page 0) ── */
+  .cover {
+    background: linear-gradient(180deg, #FBF8F3 0%, #EFE9E0 100%);
+    position: relative;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 18px;
+    border: 0.5px solid var(--gold);
+    pointer-events: none;
+  }
+  .cover-inner {
+    position: relative;
+    height: 100%;
+    padding: 4rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 1;
+  }
+  .cover-top { display: flex; flex-direction: column; gap: 0.8rem; }
+  .cover-eyebrow {
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--green-dark);
+    font-weight: 500;
+  }
+  .cover-brand {
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--text-secondary);
+  }
+  .cover-center {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cover-zh {
+    font-size: 64px;
+    line-height: 1.05;
+    letter-spacing: 0.04em;
+    color: var(--black);
+    font-weight: normal;
+    margin-bottom: 1.4rem;
+  }
+  .cover-en {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--teak);
+    letter-spacing: 0.04em;
+    margin-bottom: 2rem;
+    max-width: 540px;
+    line-height: 1.35;
+  }
+  .cover-mark {
+    width: 56px;
+    height: 0.5px;
+    background: var(--gold-dark);
+    margin-bottom: 1.5rem;
+  }
+  .cover-tagline {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.85;
+    max-width: 520px;
+  }
+  .cover-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .cover-meta {
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: 0.08em;
+    line-height: 1.7;
+  }
+  .cover-partners {
+    font-family: -apple-system, sans-serif;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    text-align: right;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1.8;
+  }
+  
+  /* ── Featured page ── */
+  .featured-page { background: #FFFEFB; overflow: hidden; }
+  
+  /* 左圖右文兩欄佈局 */
+  .featured-layout {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .featured-img-col {
+    width: 40%;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .featured-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 8s ease;
+  }
+  .featured-img-col:hover .featured-img { transform: scale(1.05); }
+  .featured-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent 50%, rgba(255,254,251,0.18) 100%);
+    pointer-events: none;
+  }
+  .featured-img-fallback {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, var(--bg-cream) 0%, var(--linen) 100%);
+  }
+  .featured-img-credit {
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    font-family: -apple-system, sans-serif;
+    font-size: 9px;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.08em;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+  .featured-text-col {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2.6rem 2.8rem 1.4rem 2.4rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--text-tertiary) transparent;
+    display: flex;
+    flex-direction: column;
+  }
+  .featured-text-col::-webkit-scrollbar { width: 4px; }
+  .featured-text-col::-webkit-scrollbar-thumb { background: var(--text-tertiary); border-radius: 2px; }
+  .featured-eyebrow {
+    font-family: -apple-system, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--green-dark);
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+  }
+  .featured-num {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.08em;
+  }
+  .featured-tagline {
+    font-size: 15px;
+    color: var(--gold-dark);
+    font-style: italic;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.04em;
+  }
+  .featured-name-zh {
+    font-size: 38px;
+    line-height: 1.2;
+    color: var(--black);
+    margin-bottom: 0.4rem;
+    font-weight: normal;
+  }
+  .featured-name-en {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.02em;
+  }
+  .featured-loc {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 1.6rem;
+  }
+  .featured-divider { width: 40px; height: 0.5px; background: var(--gold); margin-bottom: 1.6rem; }
+  .featured-desc {
+    font-size: 15.5px;
+    line-height: 1.85;
+    color: var(--black);
+    margin-bottom: 1.8rem;
+    max-width: 640px;
+  }
+  .featured-card {
+    background: linear-gradient(180deg, #FAF6F0 0%, #F2EBE0 100%);
+    border: 0.5px solid var(--border);
+    border-left: 2px solid var(--gold);
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.4rem;
+    max-width: 580px;
+  }
+  .featured-card-label {
+    font-family: -apple-system, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .featured-plan {
+    font-size: 22px;
+    color: var(--black);
+    margin-bottom: 0.3rem;
+  }
+  .featured-plan-desc {
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 0.9rem;
+  }
+  .featured-period {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .featured-foot {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-top: 0.4rem;
+  }
+  .source-badge {
+    font-family: -apple-system, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 5px 11px;
+    border-radius: 99px;
+    border: 0.5px solid currentColor;
+    font-weight: 500;
+  }
+  .source-virtuoso { color: var(--navy); background: rgba(44,95,116,0.06); }
+  .source-leading { color: var(--green-dark); background: rgba(15,110,86,0.06); }
+  .featured-link {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--navy);
+    text-decoration: none;
+    border-bottom: 0.5px solid var(--navy);
+    padding-bottom: 1px;
+    letter-spacing: 0.04em;
+  }
+  .featured-link:hover { color: var(--green-dark); border-color: var(--green-dark); }
+  
+  /* ── TOC page ── */
+  .toc-eyebrow {
+    font-family: -apple-system, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .toc-title {
+    font-size: 36px;
+    color: var(--black);
+    margin-bottom: 0.3rem;
+    font-weight: normal;
+  }
+  .toc-en {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 1.4rem;
+  }
+  .toc-divider { width: 40px; height: 0.5px; background: var(--gold); margin-bottom: 2rem; }
+  .toc-list { display: flex; flex-direction: column; gap: 0.4rem; }
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    padding: 1rem 0;
+    border-bottom: 0.5px solid var(--border);
+    cursor: pointer;
+    transition: padding 0.25s ease;
+  }
+  .toc-item:hover { padding-left: 0.6rem; }
+  .toc-item:hover .toc-region-zh { color: var(--green-dark); }
+  .toc-num {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--text-tertiary);
+    width: 30px;
+    flex-shrink: 0;
+  }
+  .toc-region-zh {
+    font-size: 22px;
+    color: var(--black);
+    transition: color 0.25s ease;
+    flex-shrink: 0;
+  }
+  .toc-region-en {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--text-tertiary);
+    margin-left: 0.4rem;
+  }
+  .toc-dots {
+    flex: 1;
+    border-bottom: 0.5px dotted var(--text-tertiary);
+    height: 1px;
+    margin: 0 0.6rem;
+    transform: translateY(-4px);
+  }
+  .toc-meta {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--text-secondary);
+    letter-spacing: 0.06em;
+  }
+  
+  /* ── Region intro page ── */
+  .region-intro-page {
+    background: linear-gradient(180deg, #FBF8F3 0%, #F2EBE0 100%);
+  }
+  .region-intro-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 4rem;
+  }
+  .region-intro-num {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--green-dark);
+    letter-spacing: 0.18em;
+    margin-bottom: 1.2rem;
+  }
+  .region-intro-zh {
+    font-size: 72px;
+    line-height: 1.05;
+    color: var(--black);
+    margin-bottom: 0.6rem;
+    font-weight: normal;
+    letter-spacing: 0.06em;
+  }
+  .region-intro-en {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 26px;
+    color: var(--teak);
+    letter-spacing: 0.04em;
+    margin-bottom: 2.2rem;
+  }
+  .region-intro-mark {
+    width: 60px;
+    height: 0.5px;
+    background: var(--gold-dark);
+    margin-bottom: 2rem;
+  }
+  .region-intro-stats {
+    display: flex;
+    gap: 3rem;
+    margin-bottom: 2rem;
+  }
+  .stat-item {}
+  .stat-num {
+    font-size: 38px;
+    color: var(--black);
+    font-weight: normal;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .stat-label {
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .region-intro-countries {
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 2;
+    max-width: 580px;
+  }
+  .region-intro-quote {
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.85;
+    border-left: 2px solid var(--gold);
+    padding-left: 1.2rem;
+    max-width: 540px;
+    margin-top: 1.6rem;
+  }
+  
+  /* ── Hotels listing page ── */
+  .listing-header {
+    margin-bottom: 1.4rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .listing-eyebrow {
+    font-family: -apple-system, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .listing-title {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .listing-zh {
+    font-size: 28px;
+    color: var(--black);
+    font-weight: normal;
+  }
+  .listing-en {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--text-tertiary);
+  }
+  .listing-count {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-left: auto;
+    letter-spacing: 0.06em;
+  }
+  
+  .hotel-card {
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 0.9rem;
+    background: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .hotel-card:hover {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-sm);
+  }
+  .hotel-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+  }
+  .hotel-name {
+    font-size: 17px;
+    color: var(--black);
+    line-height: 1.35;
+    flex: 1;
+  }
+  .hotel-city {
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    margin-bottom: 0.7rem;
+  }
+  .hotel-plan {
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--green-dark);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+  }
+  .hotel-period {
+    font-family: -apple-system, sans-serif;
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0.6rem;
+  }
+  .hotel-desc {
+    font-family: -apple-system, sans-serif;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 0.8rem;
+  }
+  .hotel-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    padding-top: 0.6rem;
+    border-top: 0.5px solid var(--border);
+  }
+  .hotel-link {
+    font-family: -apple-system, sans-serif;
+    font-size: 11.5px;
+    color: var(--navy);
+    text-decoration: none;
+    border-bottom: 0.5px solid var(--navy);
+    padding-bottom: 1px;
+    letter-spacing: 0.04em;
+    margin-left: auto;
+  }
+  .hotel-link:hover { color: var(--green-dark); border-color: var(--green-dark); }
+  
+  /* ── Country sub-nav ── */
+  .country-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.4rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .country-pill {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border);
+    border-radius: 99px;
+    padding: 5px 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .country-pill:hover { color: var(--black); border-color: var(--gold); }
+  .country-pill.active {
+    background: var(--black);
+    color: var(--white);
+    border-color: var(--black);
+  }
+  .country-pill .pill-count {
+    font-size: 10px;
+    margin-left: 4px;
+    color: var(--text-tertiary);
+  }
+  .country-pill.active .pill-count { color: var(--gold); }
+  
+  /* ── Page footer ── */
+  .page-footer {
+    flex-shrink: 0;
+    padding: 0.9rem 3.5rem;
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255,255,255,0.5);
+  }
+  .footer-brand {
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: 0.16em;
+  }
+  .footer-page {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+  
+  /* ── Navigation arrows ── */
+  .nav-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(245,241,236,0.95);
+    border: 0.5px solid var(--border);
+    backdrop-filter: blur(12px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    transition: all 0.25s ease;
+    box-shadow: var(--shadow-md);
+  }
+  .nav-arrow:hover {
+    background: var(--white);
+    transform: translateY(-50%) scale(1.06);
+  }
+  .nav-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+  .nav-arrow.prev { left: max(20px, calc(50vw - 540px)); }
+  .nav-arrow.next { right: max(20px, calc(50vw - 540px)); }
+  .nav-arrow svg { width: 18px; height: 18px; stroke: var(--black); fill: none; stroke-width: 1.5; }
+  
+  /* ── Top bar ── */
+  .top-bar {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(245,241,236,0.95);
+    backdrop-filter: blur(12px);
+    padding: 8px 20px;
+    border-radius: 99px;
+    box-shadow: var(--shadow-md);
+    z-index: 50;
+    border: 0.5px solid var(--border);
+  }
+  .top-bar-brand {
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: 0.18em;
+  }
+  .top-bar-divider { width: 1px; height: 14px; background: var(--border); }
+  .top-bar-progress {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+  .top-bar-toc {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .top-bar-toc:hover { color: var(--black); }
+  
+  /* ── Loading ── */
+  .loading {
+    position: fixed;
+    inset: 0;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: opacity 0.5s ease;
+  }
+  .loading.hidden { opacity: 0; pointer-events: none; }
+  .loading-text {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+  }
+  
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .book {
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      max-height: none;
+    }
+    .page { border-radius: 0; }
+    .page-inner { padding: 4.5rem 1.5rem 1.5rem; }
+    .cover-inner { padding: 5rem 1.8rem 1.5rem; }
+    .cover-zh { font-size: 44px; }
+    .cover-en { font-size: 17px; }
+    .cover-tagline { font-size: 14px; }
+    .cover-tagline br { display: none; }
+    .featured-name-zh { font-size: 28px; }
+    .featured-desc { font-size: 14.5px; }
+    .region-intro-inner { padding: 4.5rem 1.8rem 1.5rem; }
+    .region-intro-zh { font-size: 52px; }
+    .region-intro-en { font-size: 20px; }
+    .region-intro-stats { gap: 1.6rem; flex-wrap: wrap; }
+    .stat-num { font-size: 28px; }
+    .toc-title { font-size: 26px; }
+    .toc-region-zh { font-size: 18px; }
+    .toc-region-en { display: none; }
+    .listing-zh { font-size: 22px; }
+    .nav-arrow.prev { left: 8px; }
+    .nav-arrow.next { right: 8px; }
+    .nav-arrow {
+      width: 38px; height: 38px;
+      background: rgba(245,241,236,0.7);
+      top: auto;
+      bottom: 56px;
+      transform: none;
+    }
+    .nav-arrow:hover { transform: scale(1.06); }
+    .page-footer { padding: 0.6rem 1.5rem; }
+    .featured-card { padding: 1.1rem 1.2rem; }
+    .featured-plan { font-size: 19px; }
+    .top-bar { padding: 6px 14px; gap: 0.6rem; }
+    .top-bar-brand { font-size: 9.5px; letter-spacing: 0.14em; }
+    .top-bar-progress { font-size: 11px; }
+    .top-bar-toc { font-size: 9.5px; letter-spacing: 0.1em; }
+  }
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading">
+  <div class="loading-text">LIVEWELL</div>
+</div>
+
+<div class="top-bar" id="topBar" style="display:none;">
+  <span class="top-bar-brand">艾旅 LIVEWELL</span>
+  <span class="top-bar-divider"></span>
+  <span class="top-bar-progress" id="progress">— / —</span>
+  <span class="top-bar-divider"></span>
+  <button class="top-bar-toc" onclick="goToPage(3)">目錄</button>
+</div>
+
+<div class="book-stage">
+  <div class="book" id="book"></div>
+</div>
+
+<button class="nav-arrow prev" id="prevBtn" onclick="prevPage()">
+  <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+</button>
+<button class="nav-arrow next" id="nextBtn" onclick="nextPage()">
+  <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+</button>
+
+<script>
+const DATA = {"featured": [{"region": "亞洲", "country": "日本", "city": "Osaka", "name_zh": "大阪華爾道夫酒店", "name": "Waldorf Astoria Osaka", "plan": "Stay 3, Pay 2", "plan_desc": "住三晚僅付兩晚", "period": "2026 全年適用", "period_en": "Jan 1 – Dec 31, 2026", "desc": "華爾道夫品牌進駐日本的首間據點，座落於全新落成的「Grand Green」開發區，自梅田搭乘新幹線僅需十五分鐘即抵京都，將百年禮遇傳統與大阪當代風情融於一體。", "tagline": "百年禮遇傳統，初登關西", "source": "Virtuoso", "url": "https://www.virtuoso.com/promotions/18354304/stay-pay-offer-stay-3-pay-2", "img": "https://media.virtuoso.com/m/Images/Brochures/16930345_2_1_0405.webp", "img_credit": "© Waldorf Astoria Osaka"}, {"region": "歐洲", "country": "法國", "city": "Paris", "name_zh": "巴黎盧泰西亞文華東方酒店", "name": "Mandarin Oriental Lutetia Paris", "plan": "Stay 4, Pay 3", "plan_desc": "住四晚僅付三晚", "period": "2026 年 7 月 12 日至 9 月 30 日", "period_en": "Jul 12 – Sep 30, 2026", "desc": "巴黎左岸聖日耳曼德佩區的傳奇地標，文藝與優雅在此交會。除第四晚免費外，每日雙人早餐、EUR 100 飯店消費額度、保證提早入住等艾旅獨家禮遇一應俱全。", "tagline": "左岸夏夜，第四晚屬於你", "source": "Virtuoso", "url": "https://www.virtuoso.com/promotions/18381962/stay-4-pay-3", "img": "https://media.ffycdn.net/eu/mandarin-oriental-hotel-group/FtRuy13yZPCwgBDYoMVR.jpg?mod=v1/contain=-x1000&quality=75", "img_credit": "© Mandarin Oriental Lutetia Paris"}], "regions": {"亞洲": {"countries": {"中國": {"en": "China", "hotels": [{"name": "Bellagio by MGM Shanghai - on the Bund", "city": "Shanghai", "period": "2026-01-01 to 2026-12-31", "plan": "Pay for two nights, stay for three nights", "url": "https://www.virtuoso.com/promotions/18380760/pay-for-two-nights-stay-for-three-nights", "desc": "Pay for 2 nights and stay 3 nights at Bellagio by MGM Shanghai on the Bund (first Bellagio outside the US). Applicable room types: Luxury Terrace, Luxury River View, Terrace River View, Luxury Suite, Luxury River View Suite, Executive Suite, Executive River View Suite. Combinable with Virtuoso benefits. 162 rooms with private terraces and butler service. LAGO restaurant, 20,000 sqft sky-inspired spa. Valid until Dec 31, 2026.", "source": "Virtuoso"}, {"name": "Shangri-La China World Summit Wing, Beijing", "city": "Beijing", "period": "有效期至 2026 年 12 月 30 日止", "plan": "Stay 3 pay 2", "url": "https://www.virtuoso.com/promotions/18371266/stay-3-pay-2", "desc": "Stay 3 nights and pay for 2 at Shangri-La China World Summit Wing Beijing. Includes: complimentary room upgrade upon arrival (subject to availability), daily breakfast for 2 at the restaurant, USD 100 F&B or spa credit (non-combinable, no cash value for unused portion), early check-in/late check-out subject to availability, complimentary Wi-Fi. Valid until Dec 30, 2026.", "source": "Virtuoso"}, {"name": "Shangri-La China World Summit Wing, Beijing", "city": "Beijing", "period": "有效期至 2026 年 12 月 26 日止", "plan": "Stay 4 pay 3", "url": "https://www.virtuoso.com/promotions/18357385/stay-4-pay-3", "desc": "Stay 4 nights and pay for 3 at Shangri-La China World Summit Wing Beijing. Includes: room upgrade upon arrival (subject to availability), daily breakfast for 2, USD 100 F&B or spa credit (non-combinable, no cash value), early check-in/late check-out, free Wi-Fi. Valid until Dec 26, 2026.", "source": "Virtuoso"}, {"name": "The Anandi Hotel and Spa Shanghai", "city": "Shanghai", "period": "有效期至 2026 年 12 月 31 日止", "plan": "Stay 3 Pay 2", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18480889/stay-3-pay-2", "desc": "Stay 3 nights and pay for 2 at The Anandi Hotel and Spa Shanghai (all room types). Includes: daily buffet breakfast for 2, USD 100 F&B/spa credit per room per stay. Virtuoso benefits: room upgrade at booking, early check-in/late check-out. For 6+ nights: extra USD 100 F&B credit (total USD 200) and RMB 300 e-voucher for spa services. Wellness hotel with essential oil air purification, 15-option pillow menu, and bespoke bathing rituals. Valid until Dec 31, 2026.", "source": "Virtuoso"}, {"name": "The Ritz-Carlton Shanghai, Pudong", "city": "Shanghai", "period": "2026年9月30日 (有多個停維日期)", "plan": "Stay 3 Pay 2", "url": "https://www.virtuoso.com/promotions/16691842/stay-3-pay-2", "desc": "Stay 3 nights and pay for 2 at The Ritz-Carlton Shanghai Pudong. Book a Carlton Suite or Pearl Tower View Suite for 3+ consecutive nights and receive the 3rd night complimentary. Includes: Club Lounge access for 2 guests and Virtuoso benefits. Valid until Sep 30, 2026. Multiple blackout dates apply. Contact hotel sales for availability.", "source": "Virtuoso"}, {"name": "Guanyin Yiyuntai Hotel Chengdu", "city": "Chengdu", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Guanyin-Yiyuntai-Hotel-Chengdu-China", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Guanyin Yiyuntai Hotel Chengdu", "city": "Chengdu", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Guanyin-Yiyuntai-Hotel-Chengdu-China", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "J Hotel, Shanghai Tower", "city": "Shanghai", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/J-Hotel-Shanghai-Tower-Shanghai-China", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Anandi Hotel and Spa", "city": "Shanghai", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Anandi-Hotel-Spa-Hongquiao-Shanghai-China", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Anandi Hotel and Spa", "city": "Shanghai", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Anandi-Hotel-Spa-Hongquiao-Shanghai-China", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The PuLi Shanghai", "city": "Shanghai", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/The-PuLi-Shanghai-Shanghai-China", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The PuLi Shanghai", "city": "Shanghai", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-PuLi-Shanghai-Shanghai-China", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The PuXuan Hotel and Spa", "city": "Beijing", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/PuXuan-Hotel-Spa-Beijing-China", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The PuXuan Hotel and Spa", "city": "Beijing", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/PuXuan-Hotel-Spa-Beijing-China", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 14}, "香港": {"en": "Hong Kong SAR", "hotels": [{"name": "Island Shangri-La, Hong Kong", "city": "Hong Kong", "period": "2026-07-08；入住截至2026-07-31", "plan": "Stay 3 Pay 2 and get upgraded to the Horizon Club rooms", "url": "https://www.virtuoso.com/promotions/16867201/stay-3-pay-2-and-get-upgraded-to-the-horizon-club-rooms", "desc": "Stay 3 consecutive nights and pay for 2 at Island Shangri-La Hong Kong, upgraded to Horizon Club rooms. Eligible room types: Deluxe Peak View, Deluxe Harbour View, City View Suite, Premier Harbour Suite (renovated), Executive Suite, Harbour View Suite (classic). Upgrade: Deluxe Peak View to Horizon Peak View Room; Deluxe Harbour View to Harbour View Room Suite. Horizon Club access includes afternoon snacks, afternoon tea, evening cocktails. Max 6 nights per booking. Book by Jul 8, 2026; stay by Jul 31, 2026.", "source": "Virtuoso"}, {"name": "Upper House Hong Kong", "city": "Hong Kong", "period": "2027年3月1日 (含限制日期)", "plan": "Stay 3 Pay 2", "url": "https://www.virtuoso.com/promotions/16767670/stay-3-pay-2", "desc": "Stay 3 nights and pay for 2 at Upper House Hong Kong - the 3rd night is complimentary. Applicable to Studio 70 Harbour and Studio 80 room types only. Includes Virtuoso benefits, subject to availability and blackout dates. Valid for stays from now until Mar 1, 2027. Atop Pacific Place, with views of Hong Kong skyline and Victoria Harbour from floor 38.", "source": "Virtuoso"}, {"name": "Upper House Hong Kong", "city": "Hong Kong", "period": "2027年3月1日 (僅限 Studio 70 Harbour 和 Studio 80房型)", "plan": "Stay 4 Pay 3", "url": "https://www.virtuoso.com/promotions/16688801/stay-4-pay-3", "desc": "Stay 4 nights or more and receive the 4th night complimentary at Upper House Hong Kong. Applicable to Studio 70 Harbour and Studio 80 room types only. Includes: daily breakfast for 2 at Salisterra, USD 100 hotel credit, early check-in/late check-out, room upgrade to next category (subject to availability; not for suites and penthouses). Valid until Mar 1, 2027.", "source": "Virtuoso"}], "count": 3}, "印度": {"en": "India", "hotels": [{"name": "The Leela Palace Udaipur", "city": "Udaipur", "period": "有效期至 2026 年 9 月 30 日止", "plan": "Royal Summer Escape - Pay 2 Stay 3", "url": "https://www.virtuoso.com/promotions/18474704/royal-summer-escape-pay-2-stay-3", "desc": "Pay for 2 nights and stay 3 at The Leela Palace Udaipur on Lake Pichola. Package includes Ojasvia welcome ceremony, daily breakfast, cultural experiences (pottery, block printing workshops), and INR 3,000 hotel credit per stay for all rooms and suites. Valid until Sep 30, 2026.", "source": "Virtuoso"}, {"name": "The Imperial, New Delhi", "city": "New Delhi", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-Imperial-New-Delhi-New-Delhi-India", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}, "印尼": {"en": "Indonesia", "hotels": [{"name": "Amandari", "city": "Ubud", "period": "2027年3月31日 (停絶日期: 2026-07-01/08-31, 2026-12-20/2027-01-09, 2027-02-03/02-11)", "plan": "Extend Your Stay (Stay 3 Pay 2)", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18139344/extend-your-stay-stay-3-pay-2", "desc": "Stay 3 nights and get the 3rd night free at Amandari Ubud (valid until Mar 31, 2027). Applicable villas: Asmara Pool Villa, Ayung Pool Villa, Ayung Pool Duplex Villa, 1/2/3-bedroom Amandari Villas. Includes: complimentary 3rd night, round-trip airport transfers, daily breakfast, daily traditional afternoon tea and pasar snacks, daily Balinese dance and rindik music classes with local children, daily minibar refreshments (soft drinks only). New bookings only, not combinable.", "source": "Virtuoso"}, {"name": "Amandari", "city": "Ubud", "period": "有效期至 2027 年 3 月 31 日止", "plan": "Extend Your Stay (Stay 4 Pay 3)", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18139343/extend-your-stay-stay-4-pay-3", "desc": "Stay 4 nights and get the 4th night free at Amandari Ubud. Applicable to Duplex Terrace, Valley Terrace, Garden Pool Terrace, and Duplex Pool Villa. Includes: complimentary 4th night, breakfast for 2, round-trip airport transfers, daily non-alcoholic minibar. Full prepayment at booking; no cancellations allowed. Combinable with Virtuoso. Valid until Mar 31, 2027.", "source": "Virtuoso"}, {"name": "Amanjiwo", "city": "Magelang", "period": "有效期至 2027 年 3 月 31 日止", "plan": "Extend Your Stay (Stay 4 Pay 3)", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18138723/extend-your-stay-stay-4-pay-3", "desc": "Stay 4 nights and get the 4th night free at Amanjiwo (UNESCO Borobudur temple views). Applicable: Garden Pool Terrace, Menoreh Terrace, Menoreh Pool Terrace, Borobudur Terrace, Borobudur Pool Terrace, Dalem Jiwo 2BR Villa. Full prepayment; no cancellations. Combinable with Virtuoso. Valid until Mar 31, 2027.", "source": "Virtuoso"}, {"name": "Amankila", "city": "Manggis", "period": "2026-01-03 to 2027-03-31 (停絶: Aug 1-31 2026, Dec 20 2026 - Jan 3 2027)", "plan": "Extend Your Stay (Stay 4 Pay 3)", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18140996/extend-your-stay-stay-4-pay-3", "desc": "Stay 4 nights and get the 4th night free at Amankila (Bali, East coast cliff-top resort). Applicable: Ocean Terrace, Garden Pool Terrace, Ocean Pool Terrace, Kirasari Pool Villa, Indrakila Pool Villa, Amankila 2BR Villa. Includes: complimentary 4th night, airport transfers, daily breakfast, afternoon tea & pasar snacks, daily minibar, morning yoga, non-motorized water sports. Full prepayment; no cancellations. Combinable with Virtuoso. Valid Jan 3, 2026 - Mar 31, 2027.", "source": "Virtuoso"}, {"name": "Buahan, A Banyan Tree Escape", "city": "Ubud", "period": "有效期至 2026 年 6 月 30 日止", "plan": "Stay 3 Pay 2 (on half board)", "url": "https://www.virtuoso.com/promotions/18473163/stay-3-pay-2-on-half-board", "desc": "Book 2 consecutive nights and receive the 3rd night complimentary at Buahan, A Banyan Tree Escape (adults-only treehouse resort). Applicable to all villa categories. Includes Virtuoso benefits. New bookings only, subject to availability. Full payment required at booking. No cancellation allowed. Valid until Jun 30, 2026.", "source": "Virtuoso"}, {"name": "Buahan, A Banyan Tree Escape", "city": "Ubud", "period": "有效期至 2026 年 12 月 19 日止", "plan": "Stay 4 Pay 3", "url": "https://www.virtuoso.com/promotions/18358487/stay-4-pay-3", "desc": "Book 3 consecutive nights and receive the 4th night free at Buahan, A Banyan Tree Escape (adults-only treehouse resort). Applicable to all villa categories. Includes Virtuoso benefits. New bookings only, full payment required; non-refundable. Cannot be combined with other offers. 16 open-air villas with private pools. Zero-waste plant-based kitchen, Toja spa. Valid until Dec 19, 2026.", "source": "Virtuoso"}, {"name": "Jumeirah Bali", "city": "Bali", "period": "有效期至 2027 年 12 月 31 日止", "plan": "Stay 3 Pay 2", "url": "https://www.virtuoso.com/promotions/18476745/stay-3-pay-2", "desc": "Stay 2 nights and receive the 3rd night complimentary at Jumeirah Bali (cliff-top resort inspired by ancient Javanese-Hindu water palaces). 123 villas with private plunge pools and butler service. Includes: daily buffet breakfast for 2, 15% commission before tax, 90-min massage for 2 per villa per stay, complimentary airport transfers for 2-bedroom ocean view villas, and dinner for 2 at Segaran for 6-night stays. Valid until Dec 31, 2027.", "source": "Virtuoso"}, {"name": "Jumeirah Bali", "city": "Bali", "period": "有效期至 2027 年 1 月 8 日止", "plan": "Stay 4 Pay 3", "url": "https://www.virtuoso.com/promotions/18368536/stay-4-pay-3", "desc": "Book 3 consecutive nights and receive the 4th night free at Jumeirah Bali (cliff-top resort). Includes: daily buffet breakfast for 2, 15% commission pre-tax, 50-min massage for 2 per villa per stay, free airport transfers for 2BR Ocean View Pool Villa, dinner for 2 at Segaran for 6-night stays. Valid until Jan 8, 2027. Rate code: MVR6BB1.", "source": "Virtuoso"}, {"name": "Raffles Bali", "city": "Bali", "period": "有效期至 2026 年 12 月 31 日止", "plan": "The Raffles Indulgence - Stay Pay Offer with up to USD 200 Resort Credit", "url": "https://www.virtuoso.com/promotions/18077892/the-raffles-indulgence-stay-pay-offer-with-up-to-usd-200-resort-credit", "desc": "Multiple stay-pay options at Raffles Bali (all-villa resort near airport): Stay 3 Pay 2 / Stay 4 Pay 3 / Stay 5 Pay 4. Includes: daily buffet breakfast at Rumari for 2, free airport transfers, Wi-Fi, villa upgrade. Resort credit scales with stay length: 2 nights = USD 150, 3 nights = USD 150 + dinner, 4 nights = USD 200 + lunch + sunset cocktails, 5+ nights = USD 200 + 90-min spa for 2. Valid until Dec 31, 2026.", "source": "Virtuoso"}, {"name": "Capella Ubud", "city": "Ubud", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Capella-Ubud-Bali-Indonesia", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Capella Ubud", "city": "Ubud", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Capella-Ubud-Bali-Indonesia", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Nihi Sumba", "city": "Sumba", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Nihi-Sumba-Sumba-Indonesia", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 12}, "日本": {"en": "Japan", "hotels": [{"name": "Halekulani Okinawa", "city": "Okinawa", "period": "Stay: 2026-09-01 to 2027-03-31; Book: 2026-04-01 to 2027-01-31", "plan": "Stay 4 Pay 3", "url": "https://www.virtuoso.com/promotions/18055148/stay-4-pay-3", "desc": "Stay 4+ consecutive nights and get the 4th night free at Halekulani Okinawa (and every 4th night for 8-night stays). Applicable: Superior Ocean View to Coral Suite. Book Apr 1, 2026 - Jan 31, 2027; stay Sep 1, 2026 - Mar 31, 2027. Blackout dates: Sep 19-23, Oct 9-12, Dec 29-31, Jan 1-3. 360 rooms and suites with private balconies, Michelin-starred Shiroux restaurant, 5 pools, spa with ancient Okinawan healing.", "source": "Virtuoso"}, {"name": "Hotel New Otani Tokyo EXECUTIVE HOUSE ZEN", "city": "Tokyo", "period": "2026-04-13 to 2026-12-27 (有效期至2026-12-12)", "plan": "Pay 2, Stay 3 Offer", "url": "https://www.virtuoso.com/promotions/18385785/pay-2-stay-3-offer", "desc": "Pay for 2 nights and stay 3 at Hotel New Otani Tokyo EXECUTIVE HOUSE ZEN (floors 11-12). Valid for stays Apr 13 - Dec 27, 2026. Book junior suites or suites to receive additional USD 100 credit. 87 rooms and suites with traditional Japanese elements. Access to all Hotel New Otani facilities including 38 restaurants, fitness club & spa, 400-year-old Japanese garden, outdoor pool. Valid until Dec 12, 2026.", "source": "Virtuoso"}, {"name": "ROKU KYOTO, LXR Hotels & Resorts", "city": "Kyoto", "period": "有效期至 2026 年 12 月 31 日止", "plan": "Stay 3 Nights, Pay For 2", "url": "https://www.virtuoso.com/promotions/18187556/stay-3-nights-pay-for-2", "desc": "Stay 3 nights and pay for 2 at ROKU KYOTO (LXR Hotels & Resorts) in the historic mountain resort area of Kyoto. Book this offer and enjoy the 3rd night complimentary. Virtuoso benefits: room upgrade upon arrival, daily buffet breakfast for 2, USD 100 hotel credit; extra USD 100 credit for Onsen Garden, Pool Terrace or Suite rooms; extra USD 100 for 3+ nights; extra USD 200 for 7+ nights. Valid until Dec 31, 2026.", "source": "Virtuoso"}, {"name": "The Capitol Hotel Tokyu", "city": "Tokyo", "period": "Period 1: check-in by 2026-03-19 (book by 2026-03-16); Period 2: 2026-04-12 to 2026-12-18 (book by 2026-12-15)", "plan": "Stay 3 nights, Pay for 2", "url": "https://www.virtuoso.com/promotions/18126411/stay-3-nights-pay-for-2", "desc": "Exclusive offer: stay 3 nights and get the 3rd night free at The Capitol Hotel Tokyu in central Tokyo's Akasaka, with direct access to 4 metro lines. Two stay periods: before Mar 19, 2026 (book by Mar 16) and Apr 12 - Dec 18, 2026 (book by Dec 15). Applicable to all room types. Dynamic rate. Designed by Kengo Kuma. Adjacent to Hie Shrine with ikebana art installations.", "source": "Virtuoso"}, {"name": "The Okura Tokyo", "city": "Tokyo", "period": "2026-06-01 to 2026-09-18", "plan": "Japanese Summer Retreat: Stay for 3, Pay for 2", "url": "https://www.virtuoso.com/promotions/18476337/japanese-summer-retreat-stay-for-3-pay-for-2", "desc": "Stay 3 consecutive nights and get the 3rd night free at The Okura Tokyo (Jun 1 - Sep 18, 2026). Applicable to Heritage Wing and Prestige Tower traditional and prestige rooms, junior suites and suites. Includes: daily buffet breakfast for 2, USD 100 F&B/spa credit (excluding Sushi Kyubey). Room upgrade/early check-in/late check-out subject to availability. Home of the oldest private museum in Japan (est. 1917), classic music concerts on the 25th of even months.", "source": "Virtuoso"}, {"name": "Waldorf Astoria Osaka", "city": "Osaka", "period": "2026-01-01 to 2026-12-31; booking window 2025-12-16 to 2026-12-30", "plan": "Stay Pay Offer - Stay 3, Pay 2", "url": "https://www.virtuoso.com/promotions/18354304/stay-pay-offer-stay-3-pay-2", "desc": "Stay 3 nights and pay for 2 - stay 2 nights and get the 3rd night free. Valid for stays from Jan 1 to Dec 31, 2026. Booking window: Dec 16, 2025 to Dec 30, 2026. Waldorf Astoria Osaka is the brand's first property in Japan, located in the new Grand Green development, 15 min by Shinkansen from UNESCO-listed Kyoto.", "source": "Virtuoso"}, {"name": "Palace Hotel Tokyo", "city": "Tokyo", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Palace-Hotel-Tokyo-Tokyo-Japan", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Palace Hotel Tokyo", "city": "Tokyo", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Palace-Hotel-Tokyo-Tokyo-Japan", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Hotel Seiryu Kyoto Kiyomizu", "city": "Kyoto", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/The-Hotel-Seiryu-Kyoto-Kiyomizu-Kyoto-Japan", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Okura Tokyo", "city": "Tokyo", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Okura-Tokyo-Tokyo-Japan", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 10}, "韓國": {"en": "Korea", "hotels": [{"name": "The Shilla Seoul", "city": "Seoul", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/The-Shilla-Seoul-Seoul-Korea", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 1}, "馬來西亞": {"en": "Malaysia", "hotels": [{"name": "The Datai Langkawi", "city": "Langkawi", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-Datai-Langkawi-Langkawi-Malaysia", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 1}, "新加坡": {"en": "Singapore", "hotels": [{"name": "Raffles Singapore", "city": "Singapore", "period": "2026年12月23日 (含停絶日期)", "plan": "Enjoy a complimentary 4th night on us", "url": "https://www.virtuoso.com/promotions/18346997/enjoy-a-complimentary-4th-night-on-us", "desc": "Stay 3 nights and receive the 4th night complimentary at Raffles Singapore (2025 World's 50 Best Hotels #5). All-suite hotel. Includes: daily breakfast for 2, welcome Singapore Sling cocktail, early check-in/late check-out, room upgrade to next suite category, USD 100 hotel credit, 24-hr Raffles butler service, complimentary Raffles Spa & wellness access. New bookings only. Valid until Dec 23, 2026.", "source": "Virtuoso"}, {"name": "Shangri-La Singapore", "city": "Singapore", "period": "2026-10-31；旅行至2027-01-31 (停絶日期包括 May 28-30, Oct 8-10, Dec 25-27, Dec 31-Jan 1)", "plan": "Enjoy a Complimentary 3rd Night On Us", "url": "https://www.virtuoso.com/promotions/18077893/enjoy-a-complimentary-3rd-night-on-us", "desc": "Stay 3 consecutive nights and pay for 2 at Shangri-La Singapore (15-acre tropical garden resort near Orchard Road). Book by Oct 31, 2026; travel by Jan 31, 2027. Applicable to Tower Wing, Garden Wing, and Valley Wing all room types (excluding specific luxury/suite categories). Includes Virtuoso benefits: daily buffet breakfast for 2, USD 100 hotel credit, room upgrade, early check-in/late check-out, free Wi-Fi. Combinable with Virtuoso. 10% commission. Blackout dates apply.", "source": "Virtuoso"}, {"name": "Shangri-La Singapore", "city": "Singapore", "period": "2026-10-31；旅行至2027-01-31 (停絶: May 28-30, Oct 8-10)", "plan": "A Complimentary 4th night on us at Shangri-La Singapore", "url": "https://www.virtuoso.com/promotions/16848408/a-complimentary-4th-night-on-us-at-shangri-la-singapore", "desc": "Book 3 nights and get the 4th night free at Shangri-La Singapore. Book by Oct 31, 2026; stay by Jan 31, 2027. Applicable to Tower Wing, Garden Wing, Valley Wing (excluding luxury/signature suites). Combinable with Virtuoso. 10% commissionable. Virtuoso inclusions: daily breakfast for 2, USD 100 hotel credit, room upgrade, early check-in/late check-out, free Wi-Fi. Blackout dates: May 28-30, Oct 8-10.", "source": "Virtuoso"}, {"name": "The Fullerton Bay Hotel Singapore", "city": "Singapore", "period": "2026年9月30日 (預訂截至2026-06-30；適用所有房型)", "plan": "Stay 3 Nights for the Price of 2 (Suites)", "url": "https://www.virtuoso.com/promotions/18067807/stay-3-nights-for-the-price-of-2", "desc": "Stay 3 nights for the price of 2 at The Fullerton Bay Hotel Singapore (all rooms and suites). Book by Jun 30, 2026; stay by Sep 30, 2026. Max 4 complimentary nights per stay. Cannot be combined with other offers. The fully water-built hotel on Marina Bay with striking glass facade. 5 culturally-themed suites. Rooftop pool, Lantern Bar.", "source": "Virtuoso"}, {"name": "The Fullerton Hotel Singapore", "city": "Singapore", "period": "2026年9月30日 (預訂截至2026-06-30；僅限套房)", "plan": "Stay 3 Nights for the Price of 2 (Suites)", "url": "https://www.virtuoso.com/promotions/16771206/stay-3-nights-for-the-price-of-2-suites", "desc": "Stay 3 nights for the price of 2 at The Fullerton Hotel Singapore (suites only). Applicable to all suite bookings. Book by Jun 30, 2026; stay by Sep 30, 2026. Cannot be combined with other offers. Blackout dates may apply. Max 4 complimentary nights per stay. Iconic colonial building in Singapore's CBD near National Gallery and Esplanade. Infinity pool, Straits Club lounge access for select rooms.", "source": "Virtuoso"}, {"name": "The Fullerton Hotel Singapore", "city": "Singapore", "period": "2026年9月30日 (預訂截至2026-06-30; 不適用套房)", "plan": "Stay 4 Nights for the Price of 3", "url": "https://www.virtuoso.com/promotions/16789874/stay-4-nights-for-the-price-of-3", "desc": "Stay 4 nights for the price of 3 at The Fullerton Hotel Singapore. Applicable to all room types (excluding suites). Book by Jun 30, 2026; stay by Sep 30, 2026. Max 4 complimentary nights per stay. Cannot be combined with other offers. Blackout dates may apply. Iconic colonial-era hotel in Singapore's CBD near National Gallery and Esplanade. Infinity pool, Straits Club access for select rooms.", "source": "Virtuoso"}, {"name": "The Capitol Kempinski Hotel Singapore", "city": "Singapore City", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Capitol-Kempinski-Singapore", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 7}, "泰國": {"en": "Thailand", "hotels": [{"name": "Aman Nai Lert Bangkok", "city": "Bangkok", "period": "/預訂截至2026年10月31日", "plan": "Extend Your Stay - Stay 3 Pay 2", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18371268/extend-your-stay-stay-3-pay-2", "desc": "Stay 3+ nights and receive the 3rd night complimentary at Aman Nai Lert Bangkok. Includes: complimentary 3rd night, daily breakfast, Suvarnabhumi (BKK) fast-track service, luxury car transfers to/from BKK or DMK airports, in-room amenities (minibar), customized wellness consultation, Nailert Park Heritage House tour, flexible check-in and room upgrade subject to availability. Valid/book by Oct 31, 2026.", "source": "Virtuoso"}, {"name": "Capella Bangkok", "city": "Bangkok", "period": "有效期至 2026 年 12 月 20 日止", "plan": "Riverside Retreat", "url": "https://www.virtuoso.com/promotions/16902081/riverside-retreat", "desc": "Book 2 consecutive nights at best available rate and receive 1 complimentary night at Capella Bangkok (2024 World's Best Hotel and Asia's Best Hotel, #50BestHotels). 101 rooms, suites and villas on the Chao Phraya River in the Charoenkrung cultural district. Includes Capella Cultural Curator curated experiences. Michelin-starred Cote by Mauro Colagreco, authentic Thai riverside dining at Phra Nakhon, Auriga Spa. Valid until Dec 20, 2026.", "source": "Virtuoso"}, {"name": "InterContinental Phuket Resort", "city": "Phuket", "period": "2026-04-01 to 2026-12-19 (sales period: Apr 1 - Dec 16, 2026)", "plan": "One Night On Us - Stay 3 Pay 2", "url": "https://www.virtuoso.com/promotions/18482108/one-night-on-us-stay-3-pay-2", "desc": "Stay 3 nights and InterContinental Phuket Resort pays for 1 night (Q2-Q4 2026). Sales period: Apr 1 - Dec 16, 2026. Stay period: Apr 1 - Dec 19, 2026. Applicable room types: Classic Pool View, Classic Mountain View, Classic Pool Access with Club Lounge, Pool View with Club Lounge, Sea View with Lagoon Villa Pool and Club Lounge. 10% commissionable for valid IATA. Free cancellation 7 days in advance.", "source": "Virtuoso"}, {"name": "Siam Kempinski Hotel Bangkok", "city": "Bangkok", "period": "2026-06-30；旅行期限至2026-12-31", "plan": "Stay 3 Pay 2 Promotion", "url": "https://www.virtuoso.com/promotions/18391009/stay-3-pay-2-promotion", "desc": "Stay 3 nights and pay for 2 at Siam Kempinski Hotel Bangkok, blending European elegance with Thai hospitality in a lush landscaped garden sanctuary connected to Siam Paragon mall. Booking window: now - Jun 30, 2026; travel: now - Dec 31, 2026. Virtuoso inclusions: daily breakfast for 2, USD 100 F&B credit, VIP amenity, free Wi-Fi, early check-in/late check-out, room upgrade. Subject to availability, blackout dates may apply.", "source": "Virtuoso"}, {"name": "Sindhorn Kempinski Hotel Bangkok", "city": "Bangkok", "period": "2026-06-30；入住截至2026-12-31 (停絶: Apr 12-14, Oct 1-4, Oct 11-18, Dec 20-31)", "plan": "Third Night Complimentary : Stay 3, Pay 2", "url": "https://www.virtuoso.com/promotions/16743120/third-night-complimentary-stay-3-pay-2", "desc": "Stay 3 nights and get the 3rd night complimentary at Sindhorn Kempinski Hotel Bangkok (Deluxe King and above). Book by Jun 30, 2026; stay by Dec 31, 2026. Virtuoso inclusions: guaranteed upgrade to max 2-bedroom Premier Suite (book by Jun 30), daily breakfast, USD 100 F&B/wellness credit (standard rooms) or USD 200/night for suites, complimentary non-alcoholic minibar, early check-in/late check-out, free Wi-Fi. 15% commission. Flexible cancellation up to 1 day before arrival.", "source": "Virtuoso"}, {"name": "Six Senses Samui", "city": "Koh Samui", "period": "2026-12-20 (預訂截至2026-12-15; min 5 nights)", "plan": "Extended Stay Offer - Stay 5 Pay 4!", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18111480/extended-stay-offer-stay-5-pay-4", "desc": "Stay 5 consecutive nights and get the 5th night free at Six Senses Samui (plus daily breakfast). Applicable to all villa categories. Virtuoso inclusions: room upgrade (excl. Ocean and Beach Reserve villas), daily breakfast for 2, USD 100 F&B/spa credit; extra USD 100 for Ocean/Beach Reserve villas (total USD 200). Book by Dec 15; stay by Dec 20, 2026. Cannot be combined with other promotions.", "source": "Virtuoso"}, {"name": "Six Senses Yao Noi", "city": "Phangnga", "period": "2026-12-19 (預訂截至2026-12-15; 停絶: Dec 20-Jan 10)", "plan": "Extended Stay Offer - Stay 7 Pay 6!", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18111482/extended-stay-offer-stay-7-pay-6", "desc": "Stay 7 consecutive nights and get the 7th night free (plus daily breakfast) at Six Senses Yao Noi (Phang Nga Bay, Thailand). Applicable to all villa categories except Panoramic and Ocean View Villas. Virtuoso inclusions: room upgrade, daily breakfast for 2, free 50-min massage per stay for 1BR villas. Book by Dec 15; stay until Dec 19, 2026. Cannot be combined with other offers. Blackout: Dec 20 - Jan 10.", "source": "Virtuoso"}, {"name": "The Ritz-Carlton, Bangkok", "city": "Bangkok", "period": "2026-03-15 to 2026-08-31 (預訂截至2026-08-31)", "plan": "Stay 3, Pay 2", "url": "https://www.virtuoso.com/promotions/18112186/stay-3-pay-2", "desc": "Book 3 nights and get the 3rd night free at The Ritz-Carlton Bangkok. Includes Club Lounge access for Club rooms and suites. Virtuoso benefits: welcome amenity, daily breakfast for 2, USD 100 hotel credit (restaurants, room service, spa, limousine), early check-in/late check-out, room upgrade, free Wi-Fi, GM welcome letter. Valid stay: Mar 15 - Aug 31, 2026. Min 3 nights; 30-day advance purchase for all rooms (Club and above exempt). Blackout dates apply.", "source": "Virtuoso"}, {"name": "The Siam", "city": "Bangkok", "period": "有效期至 2026 年 12 月 18 日止", "plan": "Stay 3 Pay 2", "url": "https://www.virtuoso.com/promotions/18475825/stay-3-pay-2", "desc": "Book 2 nights in a Bill Bensley-designed suite or pool villa and receive the 3rd night complimentary at The Siam - Bangkok's most private riverside retreat. Bangkok's only riverside luxury resort in the heart of the palace and historic district. Features 10 pool villas with private gardens and rooftop terraces, opium spa, and world's first luxury Muay Thai studio. Valid until Dec 18, 2026.", "source": "Virtuoso"}, {"name": "The Siam", "city": "Bangkok", "period": "2026-03-15 to 2026-10-31 (最少4次4; 可累積)", "plan": "Stay 4 Pay 3", "url": "https://www.virtuoso.com/promotions/18239093/stay-4-pay-3", "desc": "Stay longer and save more at The Siam Bangkok. Min 4 nights. Stackable: stay 8 pay 6, stay 12 pay 9, etc. Includes: daily breakfast for 2, butler service, complimentary Wi-Fi and in-room movies, free local calls, daily fresh tropical fruit basket, shuttle boat between hotel and Sathorn Pier. Valid Mar 15 - Oct 31, 2026. Cannot be combined with other offers.", "source": "Virtuoso"}, {"name": "The St. Regis Bangkok", "city": "Bangkok", "period": "有效期至 2026 年 10 月 31 日止", "plan": "Stay 3, Pay 2", "url": "https://www.virtuoso.com/promotions/16692823/stay-3-pay-2", "desc": "Stay 3 nights in a Deluxe Room or above and pay for only 2 nights. Includes: complimentary room upgrade (subject to availability), daily breakfast for 2 at VIU restaurant, USD 100 F&B credit per room per stay (excluding Zuma), early check-in/late check-out subject to availability, 24-hour St. Regis butler service, complimentary Wi-Fi. Minimum 3 consecutive nights required. Applicable to Deluxe Room and suite categories.", "source": "Virtuoso"}, {"name": "Trisara", "city": "Phuket", "period": "2027-10-31 (預訂截至2026-08-31；含停絶日期)", "plan": "VIRTUOSO THIRD NIGHT FREE", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/16809582/virtuoso-third-night-free", "desc": "Book this offer and receive the 3rd night complimentary, plus daily breakfast, and round-trip Phuket airport transfers at Trisara. Phuket's most exclusive private pool villa resort on a pristine private beach of the Andaman Sea. Michelin-starred farm-to-table restaurant PRU, Michelin Green Star restaurant JAMPA, and award-winning Jara Spa. Valid travel until Oct 31, 2027. Book by Aug 31, 2026. Subject to availability and blackout dates.", "source": "Virtuoso"}, {"name": "Aleenta Retreat Chiang Mai", "city": "Chiang Mai", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/aleenta-retreat-chiang-mai-chiang-mai-thailand", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Capella Bangkok", "city": "Bangkok", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Capella-Bangkok-Thailand", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 14}, "越南": {"en": "Vietnam", "hotels": [{"name": "Regent Phu Quoc", "city": "Phu Quoc", "period": "2026-04-01 to 2026-09-30 (blackout: Apr 30-May 3, Aug 30-Sep 2, Sep 24-27)", "plan": "Stay 3 pay 2", "url": "https://www.virtuoso.com/promotions/18460126/stay-3-pay-2", "desc": "Stay 3 nights and pay for 2 at Regent Phu Quoc on Vietnam's western white sand beach. Includes: complimentary breakfast at Rice Market, complimentary tea lounge, daily replenished beverages & snacks, complimentary laundry (3 items/room/day), room upgrade subject to availability, early check-in/late check-out, free Wi-Fi & parking, USD 100 F&B/spa credit per stay (not valid for suites/villas, alcohol, tobacco).", "source": "Virtuoso"}, {"name": "The Reverie Saigon", "city": "Ho Chi Minh City", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/The-Reverie-Saigon-Ho-Chi-Minh-City-Vietnam", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}}, "total": 66}, "歐洲": {"countries": {"奧地利": {"en": "Austria", "hotels": [{"name": "Anantara Palais Hansen Vienna Hotel", "city": "Vienna", "period": "有效期至 2026 年 11 月 30 日止", "plan": "Complimentary 3rd night in Vienna", "url": "https://www.virtuoso.com/promotions/18345150/complimentary-3rd-night-in-vienna", "desc": "Book and receive the 3rd night complimentary at Anantara Palais Hansen Vienna Hotel (1873 heritage palace on Ringstrasse). Exclusive Virtuoso offer for stays until end of November 2026. Michelin-starred EDVARD restaurant (4 chef hats, Gault&Millau 17), Theo Lounge Bar, Anantara Spa. Renovated rooms and suites. Walking distance to Vienna's main attractions.", "source": "Virtuoso"}, {"name": "Alpin Resort Sacher Seefeld - Tirol", "city": "Seefeld", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/alpin-resort-sacher-seefeld-tirol-austria", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Anantara Palais Hansen Vienna Hotel", "city": "Vienna", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Anantara-Palais-Hansen-Vienna-Hotel-Vienna-Austria", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hotel Sacher Salzburg", "city": "Salzburg", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Hotel-Sacher-Salzburg-Salzburg-Austria", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hotel Sacher Salzburg", "city": "Salzburg", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hotel-Sacher-Salzburg-Salzburg-Austria", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hotel Sacher Wien", "city": "Vienna", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hotel-Sacher-Wien-Vienna-Austria", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 6}, "比利時": {"en": "Belgium", "hotels": [{"name": "Botanic Sanctuary Antwerp", "city": "Antwerp", "period": "2026年7月12日 (僅限豪華房及以上)", "plan": "Stay 3 Nights, Pay Two this Spring Season", "url": "https://www.virtuoso.com/promotions/18365658/stay-3-nights-pay-two-this-spring-season", "desc": "Book 2 nights and get the 3rd night free at Botanic Sanctuary Antwerp (15th-century monastery in Antwerp's botanical garden, Belgium). Applies to Deluxe rooms and above. Includes all Virtuoso benefits. Blackout dates may apply. 108 personalized rooms, some with private saunas and hot tubs. Michelin-starred restaurants Hertog Jan** and Vinflov* on-site. Holistic spa. Valid until Jul 12, 2026.", "source": "Virtuoso"}, {"name": "Botanic Sanctuary Antwerp", "city": "Antwerp", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Hotel-Botanic-Sanctuary-Antwerp-Belgium", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}, "克羅埃西亞": {"en": "Croatia", "hotels": [{"name": "Palace Elisabeth, hvar heritage hotel", "city": "Hvar", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Palace-Elisabeth-Hvar-Croatia", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Villa Nai 3.3", "city": "Dugi Otok", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Villa-Nai-3-3-zman-Croatia", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}, "捷克": {"en": "Czech Republic", "hotels": [{"name": "Augustine Hotel, Prague", "city": "Prague", "period": "有效期至 2027 年 1 月 4 日止", "plan": "Stay 4 Pay 3 & Guaranteed Upgrade", "url": "https://www.virtuoso.com/promotions/18481837/stay-4-pay-3-guaranteed-upgrade", "desc": "Stay 4 nights and pay for 3 plus a guaranteed room upgrade at Augustine Hotel Prague. Located in the city centre of Prague in a working 13th-century Augustinian monastery near Charles Bridge and Prague Castle. 101 rooms and suites, private garden, historic St. Thomas brewery, fresco-decorated restaurant. Virtuoso: guaranteed upgrade to next category at booking. Valid until Jan 4, 2027.", "source": "Virtuoso"}, {"name": "Fairmont Golden Prague", "city": "Prague", "period": "Stay/Book: 2025-12-07 to 2026-08-31; Signature rooms and suites only", "plan": "Stay 3 Pay 2", "url": "https://www.virtuoso.com/promotions/18055552/stay-3-pay-2", "desc": "Stay minimum 3 nights and get the 3rd night complimentary at Fairmont Golden Prague. Includes: Fairmont Spa & Wellness Centre access (24-hr fitness studio, free WiFi). Applicable to Signature rooms and suites. Valid book/stay period Dec 7, 2025 - Aug 31, 2026. Heritage landmark hotel on the Vltava River near Charles Bridge in Prague's Old Town.", "source": "Virtuoso"}, {"name": "The Grand Mark Prague", "city": "Prague", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-Grand-Mark-Prague-Czech-Republic", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 3}, "丹麥": {"en": "Denmark", "hotels": [{"name": "d'Angleterre, Copenhagen", "city": "Copenhagen", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/d-Angleterre-Copenhagen-Copenhagen-Denmark", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "d'Angleterre, Copenhagen", "city": "Copenhagen", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hotel-dAngleterre-Copenhagen-Denmark", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}, "芬蘭": {"en": "Finland", "hotels": [{"name": "Hotel Kämp", "city": "Helsinki", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Kamp-Helsinki-Finland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 1}, "法國": {"en": "France", "hotels": [{"name": "Anantara Plaza Nice", "city": "Nice", "period": "2026-07-01 to 2026-09-03 (停絶: Aug 14-15; min 3 nights)", "plan": "Stay Longer, 3rd night courtesy at Anantara Plaza Nice", "url": "https://www.virtuoso.com/promotions/18481879/stay-longer-3rd-night-courtesy-at-anantara-plaza-nice", "desc": "Book 3+ nights and get the 3rd night free (summer offer) at Anantara Plaza Nice on Place Massena. Applicable to all room types (excluding Feature Suites: Albert I Suite and Baie des Anges Suite). Includes Virtuoso benefits. Cannot be combined with other discounts or promotions. Valid Jul 1 - Sep 3, 2026. Blackout: Aug 14-15. 151 rooms with rooftop terraces in this Belle Epoque landmark near the English Promenade.", "source": "Virtuoso"}, {"name": "Mandarin Oriental Lutetia Paris", "city": "Paris", "period": "2026-07-12 to 2026-09-30 (含黑名單日期)", "plan": "Stay 4, Pay 3", "url": "https://www.virtuoso.com/promotions/18381962/stay-4-pay-3", "desc": "Stay 4 nights and get the 4th night free at Mandarin Oriental Lutetia Paris (Left Bank, Saint-Germain-des-Pres). Includes: daily breakfast for 2, EUR 100 hotel credit per room per stay (restaurants, bar, room service, spa excl. products), guaranteed early check-in (excl. special dates), free Wi-Fi. Suites incl. airport transfers; certain suites excl. from free night. Valid Jul 12 - Sep 30, 2026.", "source": "Virtuoso"}, {"name": "Zannier Ile de Bendor - A Virtuoso Preview Property", "city": "Bandol", "period": "Stay: 2026 May, Sep, Oct (search range: Sep 1 - Nov 1, 2026)", "plan": "Pay 3 Stay 4", "url": "https://www.virtuoso.com/promotions/18377416/pay-3-stay-4", "desc": "Book 4 nights and pay for 3 at Zannier Ile de Bendor (new Virtuoso Preview property opening May 2026) - a private car-free island off Bandol, Provence. 93 rooms in 3 distinctive buildings: 1960s retro to traditional Provencal fishing cottages. Beach club, artisan craft village, wellness center, dive center. Seasonal operation; closes Nov 2, 2026 - Mar 31, 2027. Valid stay: May, Sep, Oct 2026.", "source": "Virtuoso"}, {"name": "Anantara Plaza Nice", "city": "Nice", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Anantara-Plaza-Nice-France", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Anantara Plaza Nice", "city": "Nice", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Anantara-Plaza-Nice-France", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Casadelmar", "city": "Porto-Vecchio", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hotel-Casadelmar-Porto-Vecchio-Corsica-France", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Château de Théoule", "city": "Théoule-sur-Mer", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Chateau-de-Theoule-Theoule-sur-Mer-France", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Fauchon L'Hôtel Paris", "city": "Paris", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Fauchon-Lhotel-Paris-France", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Fauchon L'Hôtel Paris", "city": "Paris", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Fauchon-Lhotel-Paris-France", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Fouquet's Paris", "city": "Paris", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Fouquets-Paris-Paris-France", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hôtel Barrière L'Hermitage La Baule", "city": "La Baule", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hotel-Barriere-LHermitage-La-Baule-LaBauleA-France", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Villa Maïa", "city": "Lyon", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Villa-Maia-Lyon-France", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 12}, "喬治亞": {"en": "Georgia", "hotels": [{"name": "The Telegraph Hotel", "city": "Tbilisi", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/The-Telegraph-Hoteli-Georgia-Tbilisi-Georgia", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Telegraph Hotel", "city": "Tbilisi", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-Telegraph-Hoteli-Georgia-Tbilisi-Georgia", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}, "德國": {"en": "Germany", "hotels": [{"name": "Conrad Hamburg", "city": "Hamburg", "period": "2026年12月31日 (僅限套房)", "plan": "Suite Discovery - Stay 4 nights and pay for 3", "url": "https://www.virtuoso.com/promotions/18112623/suite-discovery-stay-4-nights-and-pay-for-3", "desc": "Stay 4 nights in a luxury suite and pay for only 3 at Conrad Hamburg (in the historic Levante House, a protected landmark built 1912). 283 rooms with Art Deco and Art Nouveau elements. Greta Oto restaurant with Latin American cuisine, 1,000 sqm spa with 20m pool, sauna and steam. Valid until Dec 31, 2026. Suites only.", "source": "Virtuoso"}, {"name": "Hotel Taschenbergpalais Kempinski Dresden", "city": "Dresden", "period": "2026-01-01 to 2026-12-29", "plan": "Stay 3 Pay 2 at Hotel Taschenbergpalais Kempinski Dresden", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18049660/stay-3-pay-2-at-hotel-taschenbergpalais-kempinski-dresden", "desc": "Stay 2 nights and get the 3rd night free (Jan 1 - Dec 29, 2026) at Hotel Taschenbergpalais Kempinski Dresden, an 18th-century palace built by Augustus the Strong. Fully renovated in 2024. Virtuoso inclusions: complimentary buffet breakfast for 2, USD 100 F&B credit (excluding Kastenmeiers and wine bar), room upgrade, early check-in/late check-out subject to availability. Personalized welcome note and local gift from your advisor. Valid stay and booking by Dec 29, 2026.", "source": "Virtuoso"}, {"name": "Sofitel Frankfurt Opera", "city": "Frankfurt am Main", "period": "2026年9月6日 (預訂截至2026-05-17; min 3 nights)", "plan": "3=2 / 3rd night free", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18392819/3-2-3rd-night-free", "desc": "Stay 3 nights and pay for 2 (3rd night free) at Sofitel Frankfurt Opera (on Opernplatz, across from the Old Opera House). Min 3 nights. Book by May 17, 2026; stay until Sep 6, 2026. Virtuoso inclusions: room upgrade, daily breakfast for 2, USD 100 hotel credit, early check-in/late check-out. 150 rooms and suites. 25m pool, spa, Lily Bar, Schoemann brasserie with Franco-German fusion cuisine.", "source": "Virtuoso"}, {"name": "Althoff Seehotel Überfahrt", "city": "Rottach-Egern", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Althoff-Seehotel-Ueberfahrt-Rottach-Egern-Germany", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Bayerischer Hof", "city": "Munich", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Bayerischer-Hof-Munich-Germany", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Bayerischer Hof", "city": "Munich", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Bayerischer-Hof-Munich-Germany", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Colombi Hotel", "city": "Freiburg", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Colombi-Hotel-Freiburg-Germany", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Excelsior Hotel Ernst", "city": "Cologne", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Excelsior-Hotel-Ernst-Cologne-Germany", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Fontenay", "city": "Hamburg", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Fontenay-Hamburg-Germany", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 9}, "希臘": {"en": "Greece", "hotels": [{"name": "One&Only Kea Island", "city": "Cyclades Islands", "period": "2026-05-01 to 2026-10-31 (季節性; 小三居所不適用)", "plan": "Night on Us", "url": "https://www.virtuoso.com/promotions/18340791/night-on-us", "desc": "Opening offer: every 2 nights booked, receive 1 night free at One&Only Kea Island (Cyclades, Greece - 1 hour from Athens). Includes: daily breakfast, every 3rd night complimentary. Not applicable to 3BR/4BR villa or residence bookings. Seasonal property, opens May 1, 2026. Mediterranean cove resort with Karthea ancient ruins hiking, diving in Aegean wreck sites, ONE Spa. Valid May 1 - Oct 31, 2026.", "source": "Virtuoso"}, {"name": "Grand Resort Lagonissi", "city": "Lagonissi", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Grand-Resort-Lagonissi-Lagonissi-Greece", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}, "匈牙利": {"en": "Hungary", "hotels": [{"name": "Al Habtoor Palace Budapest", "city": "Budapest", "period": "有效期至 2026 年 5 月 25 日止", "plan": "Al Habtoor Palace Budapest - Stay 3 | Pay 2 - extended till May 25th 2026", "url": "https://www.virtuoso.com/promotions/18371790/al-habtoor-palace-budapest-stay-3-pay-2-extended-till-may-25th-2026", "desc": "Stay 3 nights and pay for 2 at Al Habtoor Palace Budapest (Preferred Hotels & Resorts Legend Collection, new Virtuoso member). Book travel by May 25, 2026 to receive 1 complimentary night. Dubai-style hospitality in the historic Adriai Palace building in downtown Budapest. Contact reservations@ahpbudapest.com or +36 1 429 5603 for bookings.", "source": "Virtuoso"}, {"name": "Al Habtoor Palace Budapest", "city": "Budapest", "period": "2026-09-15 (預訂截至2027-09-11)", "plan": "Al Habtoor Palace Budapest - Stay 4 | Pay 3", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18487696/al-habtoor-palace-budapest-stay-4-pay-3", "desc": "Stay 4 nights and pay for 3 at Al Habtoor Palace Budapest (Preferred Hotels & Resorts Legend Collection). Book travel by Sep 15, 2026 to receive 1 complimentary night. Virtuoso inclusions: room upgrade, daily breakfast for 2, USD 100 F&B credit, early check-in, guaranteed late check-out until 4pm. Dubai-style hospitality in the historic Adriai Palace. Contact reservations@ahpbudapest.com.", "source": "Virtuoso"}], "count": 2}, "愛爾蘭": {"en": "Ireland", "hotels": [{"name": "The Killarney Park", "city": "Killarney", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-Killarney-Park-Killarney-Ireland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 1}, "義大利": {"en": "Italy", "hotels": [{"name": "COMO Alpina Dolomiti (via Alpine Adventures)", "city": "Dolomites", "period": "2025-12-05 to 2026-12-20", "plan": "COMO Alpina Dolomiti Book 3 stay 4", "url": "https://www.virtuoso.com/promotions/18199880/como-alpina-dolomiti-book-3-stay-4", "desc": "Book 3 nights and get the 4th night free at COMO Alpina Dolomiti (through Alpine Adventures travel specialist). Includes: daily breakfast at Sassolungo restaurant, daily complimentary afternoon sweet and savory snacks in the Lobby Lounge & Bar. Package valid Dec 5, 2025 - Dec 20, 2026. Contact your Virtuoso advisor for booking.", "source": "Virtuoso"}, {"name": "Conrad Chia Laguna Sardinia", "city": "Chia", "period": "2026年7月31日 (預訂截至2026-05-08)", "plan": "VIRTUOSO PROMO STAY 4 PAY 3", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18393775/virtuoso-promo-stay-4-pay-3", "desc": "Stay 4 nights and pay for 3 (Virtuoso Promo) at Conrad Chia Laguna Sardinia. Book by May 8, 2026; stay until Jul 31, 2026. All 2026 Virtuoso benefits included: room upgrade, daily breakfast for 2, USD 100 F&B credit, free BioAquam spa experience per stay, 15% off spa treatments, free airport transfers for Shardana Presidential Sea View Suite. Seasonal property - opens Apr 16, 2026.", "source": "Virtuoso"}, {"name": "Fonteverde Lifestyle & Thermal Retreat, Tuscany", "city": "Siena", "period": "2026-05-03 to 2026-10-01", "plan": "Stay 4 nights and pay 3", "url": "https://www.virtuoso.com/promotions/18473059/stay-4-nights-and-pay-3", "desc": "Stay 4 nights and pay for 3 at Fonteverde Lifestyle & Thermal Retreat, Tuscany (17th-century Medici villa built over healing thermal springs in the Siena hills). Package includes: double room with breakfast, Bioaquam pool, thermal pool with hydro jets and waterfalls, Etruscan Spa suite (sauna, hot stone, hammam), morning guided hike Mon-Sat, fitness center, daily wellness wake-up, medical & beauty consultation. Valid May 3 - Oct 1, 2026.", "source": "Virtuoso"}, {"name": "Fonteverde Lifestyle & Thermal Retreat, Tuscany", "city": "Siena", "period": "有效期至 2026 年 8 月 7 日止", "plan": "Fonteverde one more night 3=2", "url": "https://www.virtuoso.com/promotions/18473057/fonteverde-one-more-night-3-2", "desc": "Stay 3 nights and pay for 2 (3rd night free) at Fonteverde Lifestyle & Thermal Retreat, Tuscany. Includes: double room, daily breakfast with local/organic ingredients, Bioaquam pool, thermal pool with jets and waterfalls, Etruscan Spa suite (sauna, hot stone, hammam by appointment only), fitness center, medical & beauty consultation. Virtuoso inclusions also apply. Valid until Aug 7, 2026.", "source": "Virtuoso"}, {"name": "Atlantis Bay", "city": "Taormina", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/atlantis-bay-taormina-italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Bagni di Pisa Palace & Thermal Spa", "city": "San Giuliano Terme", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Bagni-di-Pisa-Palace-Thermal-Spa-San-Giuliano-de-Terme-Italy", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Botania Relais & Spa", "city": "Ischia", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Botania-Relais-and-Spa-Forio-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Due Torri Hotel", "city": "Verona", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Due-Torri-Hotel-Verona-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Fonteverde Lifestyle & Thermal Retreat", "city": "San Casciano dei Bagni", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Fonteverde-San-Casciano-dei-Bagni-Italy", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Fonteverde Lifestyle & Thermal Retreat", "city": "San Casciano dei Bagni", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Fonteverde-San-Casciano-dei-Bagni-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Hotel Alassio Beach & SPA Resort", "city": "Alassio", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Grand-Hotel-Alassio-Beach-and-SPA-Resort-Alassio-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Hotel Continental Siena - Starhotels Collezione", "city": "Siena", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Grand-Hotel-Continental-Siena-Italy", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Hotel Continental Siena - Starhotels Collezione", "city": "Siena", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Grand-Hotel-Continental-Siena-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Hotel Des Étrangers", "city": "Siracusa", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Grand-Hotel-Des-Etrangers-Siracusa-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Hotel Excelsior Vittoria", "city": "Sorrento", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Grand-Hotel-Excelsior-Vittoria-Sorrento-Italy", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Hotel Excelsior Vittoria", "city": "Sorrento", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Grand-Hotel-Excelsior-Vittoria-Sorrento-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Hotel Miramare", "city": "Santa Margherita Ligure", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Grand-Hotel-Miramare-Santa-Margherita-Ligure-Italy", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Hotel Miramare", "city": "Santa Margherita Ligure", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Grand-Hotel-Miramare-Santa-Margherita-Ligure-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Hotel Quisisana", "city": "Capri", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Grand-Hotel-Quisisana-Capri-Italy", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Hotel Quisisana", "city": "Capri", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Grand-Hotel-Quisisana-Capri-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hassler Roma", "city": "Rome", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hassler-Roma-Rome-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Helvetia & Bristol Firenze - Starhotels Collezione", "city": "Florence", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Hotel-Helvetia-Bristol-Florence-Italy", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Helvetia & Bristol Firenze - Starhotels Collezione", "city": "Florence", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hotel-Helvetia-Bristol-Florence-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Il San Corrado di Noto Resort", "city": "Noto", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Il-San-Corrado-di-Noto-Resort-Noto-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "L'Andana Resort", "city": "Castiglione della Pescaia", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/LAndana-Resort-Castiglione-della-Pescaia-Italy", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "L'Andana Resort", "city": "Castiglione della Pescaia", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/LAndana-Resort-Castiglione-della-Pescaia-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Le Massif Hotel & Lodge, Courmayeur", "city": "Courmayeur", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Le-Massif-Hotel-Lodge-Courmayeur-Aosta-Italy", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Palazzo Parigi Hotel & Grand Spa", "city": "Milan", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Palazzo-Parigi-Hotel-Grand-Spa-Milan-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Palazzo Shedir", "city": "Rome", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Palazzo-Shedir-Rome-Roma-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Relais San Maurizio", "city": "Santo Stefano Belbo", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Relais-San-Maurizio-Santo-Stefano-Belbo-Turin-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Terme di Saturnia Natural SPA & Golf Resort", "city": "Saturnia", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Terme-di-Saturnia-Spa-Golf-Resort-Saturnia-Italy", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Place Firenze", "city": "Florence", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-Place-Florence-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Therasia Resort Sea and Spa", "city": "Lipari", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Therasia-Resort-Sea-Spa-Lipari-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Villa & Palazzo Aminta Beauty & SPA", "city": "Stresa", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Villa-Palazzo-Aminta-Beauty-Spa-Stresa-Italy", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Villa & Palazzo Aminta Beauty & SPA", "city": "Stresa", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Villa-Palazzo-Aminta-Beauty-Spa-Stresa-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Villa Eden – The Private Retreat", "city": "Merano", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Villa-Eden-The-Leading-Park-Retreat-Merano-Italy", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 36}, "盧森堡": {"en": "Luxembourg", "hotels": [{"name": "Le Royal Hotels & Resorts - Luxembourg", "city": "Luxembourg City", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Le-Royal-Hotels-Resorts-Luxembourg-City-Luxembourg", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 1}, "摩納哥": {"en": "Monaco", "hotels": [{"name": "Hôtel de Paris Monte-Carlo", "city": "Monte Carlo", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hotel-de-Paris-Monte-Carlo-Monte-Carlo-Monaco", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 1}, "荷蘭": {"en": "Netherlands", "hotels": [{"name": "De L'Europe Amsterdam", "city": "Amsterdam", "period": "有效期至 2026 年 12 月 31 日止", "plan": "Stay 4, Pay 3", "url": "https://www.virtuoso.com/promotions/18224627/stay-4-pay-3", "desc": "Stay 4 nights and pay for 3 at De L'Europe Amsterdam (historic hotel overlooking the Amstel River, Amsterdam's oldest family-run hotel in the city center). Includes complimentary 4th night. Cannot be combined with other promotions. Subject to availability. World-class spa and gym, fine dining, and concierge-guided local tours. Valid until Dec 31, 2026.", "source": "Virtuoso"}, {"name": "Pulitzer Amsterdam", "city": "Amsterdam", "period": "2026-10-26 to 2026-12-31", "plan": "Stay 3, Pay 2", "url": "https://www.virtuoso.com/promotions/18179908/stay-3-pay-2", "desc": "Stay 3 nights and pay for 2 at Pulitzer Amsterdam during Oct 26 - Dec 31, 2026. Includes 'Best Of' benefits. The hotel spans 25 historic canal houses along two of Amsterdam's iconic canals, with 223 residential-style rooms. Recommend canal view rooms. Jansz. restaurant, and 1909-built salon boat for classic canal cruising. New bookings only, not combinable with other packages.", "source": "Virtuoso"}, {"name": "De L'Europe Amsterdam", "city": "Amsterdam", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/DE-LEUROPE-Amsterdam-Amsterdam-Netherlands", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hotel Des Indes", "city": "The Hague", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Des-Indes-The-Hague-The-Netherlands", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hotel Okura Amsterdam", "city": "Amsterdam", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hotel-Okura-Amsterdam-Amsterdam-Netherlands", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Van Oys Maastricht Retreat", "city": "Maastricht", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Van-Oys-Maastricht-Retreat-Eijsden-Netherlands", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 6}, "挪威": {"en": "Norway", "hotels": [{"name": "Britannia Hotel", "city": "Trondheim", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Britannia-Trondheim-Norway", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hotel Continental", "city": "Oslo", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hotel-Continental-Oslo-Norway", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}, "葡萄牙": {"en": "Portugal", "hotels": [{"name": "Pestana Palace Lisboa - Hotel & National Monument", "city": "Lisbon", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Pestana-Palace-Lisboa-Hotel-National-Monument-Lisbon-Portugal", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Pestana Palácio do Freixo - Pousada & National Monument", "city": "Porto", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Pestana-Palacio-do-Freixo-Pousada-National-Monument-Porto-Portugal", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Pestana Palácio do Freixo - Pousada & National Monument", "city": "Porto", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Pestana-Palacio-do-Freixo-Pousada-National-Monument-Porto-Portugal", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Tivoli Avenida Liberdade", "city": "Lisbon", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Tivoli-Avenida-Liberdade-Lisbon-Portugal", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Valverde Sintra Palácio de Seteais", "city": "Sintra", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Valverde-Sintra-Palacio-De-Seteais-Sintra-Portugal", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Vidago Palace", "city": "Vidago", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Vidago-Palace-Vidago-Portugal", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Vidago Palace", "city": "Vidago", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Vidago-Palace-Vidago-Portugal", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 7}, "西班牙": {"en": "Spain", "hotels": [{"name": "Anantara Villa Padierna Palace - Benahavis Marbella Resort", "city": "Marbella", "period": "有效期至 2027 年 12 月 26 日止", "plan": "Complimentary Fourth Night, stay 4 pay 3 nights", "url": "https://www.virtuoso.com/promotions/18375833/complimentary-fourth-night-stay-4-pay-3-nights", "desc": "Stay 4 consecutive nights and pay for 3 at Anantara Villa Padierna Palace, Benahavis Marbella (hilltop resort surrounded by cypress trees and golf courses). Valid year-round until Dec 26, 2027. La Loggia Mediterranean restaurant, Ola Beirut Lebanese dining, 21,000 sqft spa with hammam, aromatherapy, personalized wellness programs, and 1,200+ original artworks.", "source": "Virtuoso"}, {"name": "Santo Mauro, a Luxury Collection Hotel, Madrid", "city": "Madrid", "period": "有效期至 2026 年 8 月 31 日止", "plan": "Stay 4 Nights, Pay for 3", "url": "https://www.virtuoso.com/promotions/18390513/stay-4-nights-pay-for-3", "desc": "Book 4 nights and get 1 night free at Santo Mauro, a Luxury Collection Hotel, Madrid (19th-century Chamberi palace named after the Duke of Santo Mauro). 49 luxury rooms and suites, lush private garden with century-old chestnut trees, La Biblioteca Gresca restaurant serving seasonal Castilian cuisine. Includes Virtuoso benefits. Subject to availability. Cannot be combined with other offers. Valid until Aug 31, 2026.", "source": "Virtuoso"}, {"name": "Abadia Retuerta Le Domaine", "city": "Valladolid", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Abadia-Retuerta-LeDomaine-Valladolid-Spain", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Asia Gardens Hotel & Thai Spa", "city": "Finestrat", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Asia-Gardens-Hotel-Thai-Spa-Alicante-Spain", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "BLESS Hotel Ibiza", "city": "Santa Eulalia del Rio", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Bless-Santa-Eulalia-Ibiza-Baleares-Spain", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "El Palace Barcelona", "city": "Barcelona", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/El-Palace-Barcelona-Barcelona-Spain", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hostal de la Gavina", "city": "S'Agaro", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Hostal-de-la-Gavina-Costa-Brava-Spain", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hostal de la Gavina", "city": "S'Agaro", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hostal-de-la-Gavina-Costa-Brava-Spain", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hotel De Mar, a Gran Meliá Hotel", "city": "Calvia", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/De-Mar-Gran-Melia-Illetas-Calvia-Mallorca-Spain", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "METT Barcelona", "city": "Barcelona", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/METT-Barcelona-Spain", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 10}, "瑞士": {"en": "Switzerland", "hotels": [{"name": "Bellevue Palace", "city": "Bern", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Bellevue-Palace-Bern-Berne-Switzerland", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Bellevue Palace", "city": "Bern", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Bellevue-Palace-Bern-Berne-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Chalet RoyAlp Hôtel & Spa", "city": "Villars-sur-Ollon", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Chalet-RoyAlp-H%C3%B4tel-Spa-Villars-sur-Ollon-Switzerland", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Chalet RoyAlp Hôtel & Spa", "city": "Villars-sur-Ollon", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Chalet-RoyAlp-H%C3%B4tel-Spa-Villars-sur-Ollon-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Resort Bad Ragaz", "city": "Bad Ragaz", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Grand-Resort-Bad-Ragaz-Bad-Ragaz-Switzerland", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Grand Resort Bad Ragaz", "city": "Bad Ragaz", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Grand-Resort-Bad-Ragaz-Bad-Ragaz-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Guarda Golf Hotel & Residences", "city": "Crans-Montana", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Guarda-Golf-Hotel-Residences-Crans-Montana-Switzerland", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Guarda Golf Hotel & Residences", "city": "Crans-Montana", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Guarda-Golf-Hotel-Residences-Crans-Montana-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hotel Eden Roc, Ascona", "city": "Ascona", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hotel-Eden-Roc-Ascona-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hotel Schweizerhof Bern & Spa", "city": "Bern", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Hotel-Schweizerhof-Bern-SPA-Bern-Switzerland", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hotel Schweizerhof Bern & Spa", "city": "Bern", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Hotel-Schweizerhof-Bern-SPA-Bern-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hôtel des Trois Couronnes & Destination Spa", "city": "Vevey", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/H%C3%B4tel-des-Trois-Couronnes-Destination-Spa-Vevey-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Kulm Hotel St. Moritz", "city": "St. Moritz", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Kulm-Hotel-St-Moritz-St-Moritz-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Lausanne Palace", "city": "Lausanne", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Lausanne-Palace-Lausanne-Switzerland", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Lausanne Palace", "city": "Lausanne", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Lausanne-Palace-Lausanne-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Le Mirador Resort and Spa", "city": "Mont Pelerin", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Le-Mirador-Resort-Spa-Mont-Pelerin-Switzerland", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "LeCrans", "city": "Crans-Montana", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/LeCrans-Hotel-Spa-Crans-Montana-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Dolder Grand", "city": "Zurich", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-Dolder-Grand-Zurich-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Villars Palace", "city": "Villars-sur-Ollon", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Villars-Palace-Villars-sur-Ollon-Switzerland", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Villars Palace", "city": "Villars-sur-Ollon", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Villars-Palace-Villars-sur-Ollon-Switzerland", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 20}, "土耳其": {"en": "Turkey", "hotels": [{"name": "Ariana Sustainable Luxury Lodge", "city": "Cappadocia", "period": "有效期至 2026 年 12 月 25 日止", "plan": "Stay 3 Nights in the Heart of Cappadocia, Pay for Just 2!", "url": "https://www.virtuoso.com/promotions/18343715/stay-3-nights-in-the-heart-of-cappadocia-pay-for-just-2", "desc": "Book 3 nights and get the 3rd night free at Ariana Sustainable Luxury Lodge in the heart of Cappadocia, Turkey. Eco-luxury boutique hotel built on a 2,000-year-old archaeological site with reused ancient cave dwellings and materials. Rooftop terrace with UNESCO valley views for yoga, meditation, and open-air massage. Seasonal farm-to-table menu, hot air balloon rides, local artisan workshops. Valid until Dec 25, 2026.", "source": "Virtuoso"}, {"name": "Raffles Istanbul", "city": "Istanbul", "period": "2026年12月25日 (預訂截至2026-12-22)", "plan": "Stay 3 Pay 2", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18376756/stay-3-pay-2", "desc": "Book 3 nights and receive 1 night complimentary at Raffles Istanbul (Forbes 5-Star, 3 consecutive years). Located in Zorlu Centre with Bosphorus views. Virtuoso inclusions: guaranteed room upgrade at booking, daily buffet breakfast for 2 via room service, USD 100 resort credit per stay (extra USD 100 for 5+ nights, totaling USD 200), early check-in/late check-out subject to availability. Valid until Dec 25, 2026; book by Dec 22, 2026.", "source": "Virtuoso"}, {"name": "Shangri-La Bosphorus, Istanbul", "city": "Istanbul", "period": "有效期至 2026 年 12 月 31 日止", "plan": "Stay 3 Pay 2 at Shangri-La Bosphorus, Istanbul", "url": "https://www.virtuoso.com/promotions/18401098/stay-3-pay-2-at-shangri-la-bosphorus-istanbul", "desc": "Stay 3 nights and pay for 2 at Shangri-La Bosphorus Istanbul (on the Bosphorus strait). Includes Virtuoso benefits for all bookings. 186 luxurious rooms and suites with Bosphorus views. Signature Shang Palace restaurant serves authentic Cantonese cuisine. CHI Spa with Asian wellness philosophy. Available Rolls-Royce Phantom airport transfers. Valid until Dec 31, 2026.", "source": "Virtuoso"}, {"name": "Argos in Cappadocia", "city": "Nevşehir", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Argos-in-Cappadocia-Nevsehir-Turkiye", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Princes' Palace Resort Istanbul", "city": "Istanbul", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Princes-Palace-Resort-Istanbul-Buyukada-Turkiye", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Princes' Palace Resort Istanbul", "city": "Istanbul", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Princes-Palace-Resort-Istanbul-Buyukada-Turkiye", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Çirağan Palace Kempinski Istanbul", "city": "Istanbul", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Ciragan-Palace-Kempinski-Istanbul-Istanbul-Turkiye", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Çirağan Palace Kempinski Istanbul", "city": "Istanbul", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Ciragan-Palace-Kempinski-Istanbul-Istanbul-Turkiye", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 8}, "英國": {"en": "United Kingdom", "hotels": [{"name": "Cameron House on Loch Lomond", "city": "Loch Lomond", "period": "有效期至 2026 年 12 月 20 日止", "plan": "Stay 3, Pay 2", "url": "https://www.virtuoso.com/promotions/18406620/stay-3-pay-2", "desc": "Stay longer and save: receive 1 complimentary night at Cameron House on Loch Lomond (17th-century baronial mansion on over 400 acres of woodland on the south shore of Loch Lomond, Scotland). Carrick championship golf course and award-winning spa. Scottish hospitality with fresh local produce. Boat trips, seaplane rides, and single malt whisky. Valid until Dec 20, 2026.", "source": "Virtuoso"}, {"name": "Fairmont Windsor Park", "city": "Windsor", "period": "/預訂截至2026年11月25日", "plan": "Stay 3, Pay 2", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18340808/stay-3-pay-2", "desc": "Stay 3 nights and pay for 2 at Fairmont Windsor Park (251 rooms), including daily breakfast and Virtuoso benefits. Luxury spa resort on the edge of Windsor Great Park with 40 acres of landscaped gardens and a tranquil lake. Offers padel tennis, air yoga, Pilates, boxing, spa with nature-inspired treatments, 1215 restaurant. Windsor Castle is 15 minutes away. Valid stay and book by Nov 25, 2026.", "source": "Virtuoso"}, {"name": "Hotel Cafe Royal, London", "city": "London", "period": "2026年5月31日 (僅限豪華客房及以上)", "plan": "Stay 3, Pay 2", "url": "https://www.virtuoso.com/promotions/17905898/stay-3-pay-2", "desc": "Book 2 nights and get the 3rd night complimentary at Hotel Cafe Royal London (on Regent Street at the junction of St James's, Mayfair and Soho). Valid until May 31, 2026. Applicable to Deluxe rooms and above. Subject to availability and blackout dates. New bookings only, cannot be combined with other offers. For over 150 years, the cafe royal has welcomed world-changers from Oscar Wilde to David Bowie.", "source": "Virtuoso"}, {"name": "Hotel Cafe Royal, London", "city": "London", "period": "2026-06-01 to 2026-12-31 (優惠期: May 1 - Dec 31, 2026)", "plan": "Stay 4, Pay 3", "url": "https://www.virtuoso.com/promotions/18479580/stay-4-pay-3", "desc": "Book 3 nights and get the 4th night free at Hotel Cafe Royal London (Regent Street, St James's). Includes: complimentary 4th night, Akasha Spa access, free Wi-Fi. Deluxe suites and above: free daily chauffeur service (5 hrs, Mercedes S-class or V-class). Prestige suites and above: Rolls-Royce or Range Rover. Prestige suite: option of supercar (Ferrari, Lamborghini, Bentley, Porsche, Aston Martin). Valid Jun 1 - Dec 31, 2026.", "source": "Virtuoso"}, {"name": "Shangri-La The Shard, London", "city": "London", "period": "2026年12月30日 (含黑名單日期)", "plan": "Stay Four, Pay Three", "url": "https://www.virtuoso.com/promotions/18144899/stay-four-pay-three", "desc": "Stay 4 nights in select rooms or suites and pay for 3 at Shangri-La The Shard, London (London's highest hotel). 1 complimentary night. Includes: unlimited access to Level 52 Wellness Floor (sky pool & sky sauna by appointment). 202 rooms and suites with full-height windows and panoramic city views. Afternoon tea experience at London's highest point using Borough Market ingredients. Valid until Dec 30, 2026.", "source": "Virtuoso"}, {"name": "Taj 51 Buckingham Gate Suites and Residences", "city": "London", "period": "2026年12月19日 (含停絶日期)", "plan": "Stay 3, Pay 2 nights", "url": "https://www.virtuoso.com/promotions/16918430/stay-3-pay-2-nights", "desc": "Stay 3 nights and pay for 2 at Taj 51 Buckingham Gate (guaranteed kitchenette-equipped suites). Includes: daily breakfast at Kona, USD 100 F&B credit per stay, 20% off J Wellness Circle signature treatments, complimentary gym & spa access, one-way airport transfer for 4+ nights stay, daily happy hour, welcome amenity, room upgrade subject to availability, early check-in/late check-out. Valid until Dec 19, 2026.", "source": "Virtuoso"}, {"name": "The Beaumont Mayfair", "city": "London", "period": "有效期至 2026 年 12 月 31 日止", "plan": "Stay 4 Pay 3 Offer", "url": "https://www.virtuoso.com/promotions/18044764/stay-4-pay-3-offer", "desc": "Stay 4 nights and pay for 3 at The Beaumont Mayfair (Art Deco hotel in the heart of Mayfair). 101 rooms. Rate includes: 1 complimentary night per stay, high-speed Wi-Fi, fresh in-room coffee & tea, on-demand movies, local/national calls, 24-hr gym, spa steam room and sauna, Beaumont private driver (local trips, subject to availability). Rosie restaurant by Lisa Goodwin-Allen, Le Magritte Bar, Gatsby Hall, black & white marble Turkish spa. Valid until Dec 31, 2026.", "source": "Virtuoso"}, {"name": "The Lanesborough", "city": "London", "period": "有效期至2026年5月31日止", "plan": "Fourth Night Free", "url": "https://www.virtuoso.com/promotions/16784879/fourth-night-free", "desc": "This offer is available for stays in selected categories from Deluxe Rooms up to Buckingham Suites. Available for stays with a minimum length of stay of four nights and a maximum length of stay of 16 nights. Valid for selected periods during the year. Offer is subject to availability, is not applicable for groups and cannot be combined with any other offers.", "source": "Virtuoso"}, {"name": "The Langham, London", "city": "London", "period": "2026年5月31日 (min 3 nights; Classic to 1-bed Suite)", "plan": "Stay 3, Pay 2", "url": "https://www.virtuoso.com/promotions/18087210/stay-3-pay-2", "desc": "Stay 3 nights and pay for 2 at The Langham London (West End). Applicable room types: Classic, Superior, Deluxe, Langham Club, Junior Suite, 1-bedroom Suite. Minimum 3-night stay required. Combinable with Virtuoso benefits. Cancel by 6pm local time day before arrival or forfeit 1 night. Valid until May 31, 2026. 380 rooms, Club Lounge, Michelin-starred restaurant by Michel Roux Jr., Artesian Bar.", "source": "Virtuoso"}, {"name": "The Stafford London", "city": "London", "period": "2026年12月31日 (僅限Deluxe King及以上)", "plan": "Stay 4, pay 3", "url": "https://www.virtuoso.com/promotions/16692750/stay-4-pay-3", "desc": "Book Deluxe King or higher for 3+ consecutive nights and get 1 complimentary night at The Stafford London (St. James's area). Historic quintessentially British luxury hotel in 3 buildings: Main House, Mews Suites, and renovated Carriage House including the 3-floor 2-bedroom Porter's Lodge Suite. Michael Caines Restaurant, famous American Bar with memorabilia. Includes Virtuoso benefits. Valid until Dec 31, 2026.", "source": "Virtuoso"}, {"name": "L'oscar London", "city": "London", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Loscar-London-London-England", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Landmark London", "city": "London", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/The-Landmark-London-London-England", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 12}}, "total": 147}, "美洲": {"countries": {"安圭拉": {"en": "Anguilla", "hotels": [{"name": "Malliouhana, Anguilla", "city": "Anguilla", "period": "2026年12月20日 (季節性; 關閉: Sep 1 - Oct 24, 2026)", "plan": "5th Night Complimentary + Up to $500 Resort Credit", "url": "https://www.virtuoso.com/promotions/16496625/5th-night-complimentary-up-to-500-resort-credit", "desc": "Stay 4 nights and receive the 5th night free plus resort credit at Malliouhana, Anguilla (fully renovated iconic cliffside resort). Resort credit: USD 250 for rooms, USD 500 for suites. Includes Virtuoso benefits: USD 100 F&B credit, daily breakfast at Celeste (up to USD 45/person), room upgrade. Beachfront Superior and higher: extra USD 100 F&B credit + free 50-min massage for 2. Seasonal: closes Sep 1 - Oct 24, 2026. Valid until Dec 20, 2026.", "source": "Virtuoso"}, {"name": "Quintessence Hotel Anguilla", "city": "Long Bay Village", "period": "2026年7月26日 (季節性開放; 8/1-10/31關閉)", "plan": "Stay 4 Nights, Pay for 3 Nights", "url": "https://www.virtuoso.com/promotions/18066289/stay-4-nights-pay-for-3-nights", "desc": "Stay 4 nights and pay for 3 at Quintessence Hotel Anguilla (12 ultra-private suites with concierge and 24-hr butler service). Applicable to select room types. Cannot be combined with other packages. Virtuoso benefits apply. Q Restaurant with Grand Quintessence wine cellar. Full-service spa. Seasonal: closes Aug 1-Oct 31, 2026. Valid until Jul 26, 2026.", "source": "Virtuoso"}], "count": 2}, "阿根廷": {"en": "Argentina", "hotels": [{"name": "The Vines Resort & Spa", "city": "Mendoza", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/The-Vines-Resort-Spa-Mendoza-Argentina", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Vines Resort & Spa", "city": "Mendoza", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-Vines-Resort-Spa-Mendoza-Argentina", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}, "巴貝多": {"en": "Barbados", "hotels": [{"name": "Rental Escapes (select villas)", "city": "Barbados", "period": "2026年12月14日 (指定別墅)", "plan": "Pay for 6, Stay for 7 in Barbados Villas", "url": "https://www.virtuoso.com/promotions/18224260/pay-for-6-stay-for-7-in-barbados-villas", "desc": "Book 7 nights and pay for 6 (1 night free) in select Barbados villas through Rental Escapes (Best Villa Rental Company). Valid until Dec 14, 2026. Applicable to designated villas only. Contact your Virtuoso advisor or Rental Escapes directly for specific villa options.", "source": "Virtuoso"}], "count": 1}, "英屬維京群島": {"en": "British Virgin Islands", "hotels": [{"name": "Oil Nut Bay", "city": "North Sound", "period": "Stay: 2026-06-01 to 2026-08-20 (預訂: 2026-03-01 to 05-31)", "plan": "Your Tropical Indulgence | Stay Five, Pay Four", "url": "https://www.virtuoso.com/promotions/18392825/your-tropical-indulgence-stay-five-pay-four", "desc": "Stay 5 nights and pay for 4 at Oil Nut Bay (eco-resort on 400-acre peninsula, Virgin Gorda East, BVI; accessible only by boat or helicopter). Summer offer Jun 1 - Aug 20, 2026; book Mar 1 - May 31, 2026. Includes: daily breakfast, private golf cart, plus 1 signature experience (1-hr rum tasting or North Sound sunset cruise). Virtuoso benefits apply. 1-6 bedroom villas, mostly with private pools. First over-water spa in BVI.", "source": "Virtuoso"}], "count": 1}, "加拿大": {"en": "Canada", "hotels": [{"name": "AZUR Legacy Collection Hotel", "city": "Vancouver, B.C.", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/AZUR-Legacy-Collection-Hotel-Vancouver-Canada", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "AZUR Legacy Collection Hotel", "city": "Vancouver", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/AZUR-Legacy-Collection-Hotel-Vancouver-Canada", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Le Mount Stephen", "city": "Montreal", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Le-Mount-Stephen-Montreal-Quebec-Canada", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 3}, "智利": {"en": "Chile", "hotels": [{"name": "W Santiago", "city": "Santiago", "period": "2026-05-01 to 2026-09-30 (南半球冬季)", "plan": "Winter Season Offer, the 4th on Us, stay 4 nights and Pay 3", "url": "https://www.virtuoso.com/promotions/18482039/winter-season-offer-the-4th-on-us-stay-4-nights-and-pay-3", "desc": "Book 3 consecutive nights and receive the 4th night free (winter offer) at W Santiago, Chile. 196 rooms with Andes mountain views and modern design. Virtuoso inclusions: breakfast for 2, USD 100 F&B credit, welcome amenity, room upgrade, early check-in noon, late check-out 4pm. Noso restaurant (Chilean cuisine), Kura (Japanese fusion), rooftop pool bar, 40-ft wine wall with 350 bottles. Valid May 1 - Sep 30, 2026.", "source": "Virtuoso"}, {"name": "Nayara Alto Atacama", "city": "San Pedro De Atacama", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/nayara-alto-atacama-san-pedro-de-atacama-chile", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Nayara Hangaroa", "city": "Easter Island", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Nayara-Hangaroa-Easter-Island-Chile", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 3}, "哥倫比亞": {"en": "Colombia", "hotels": [{"name": "Sofitel Legend Santa Clara Cartagena", "city": "Cartagena", "period": "2026-04-12 to 2026-11-22", "plan": "Stay 4 nights for the price of 3!", "url": "https://www.virtuoso.com/promotions/18376243/stay-4-nights-for-the-price-of-3", "desc": "Stay 4 nights for the price of 3 at Sofitel Legend Santa Clara Cartagena (founded 1621, former convent, landmark in the walled city). Includes daily breakfast for 2. Includes all Virtuoso benefits. Valid Apr 12 - Nov 22, 2026. Contact Reservations.SantaClara@sofitel.com. 4 iconic suites, world-class spa, award-winning cuisine.", "source": "Virtuoso"}], "count": 1}, "哥斯大黎加": {"en": "Costa Rica", "hotels": [{"name": "Nayara Gardens", "city": "La Fortuna", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Nayara-Gardens-La-Fortuna-Costa-Rica", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Nayara Gardens", "city": "La Fortuna", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Nayara-Gardens-La-Fortuna-Costa-Rica", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Nayara Tented Camp", "city": "La Fortuna", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Nayara-Tented-Camp-La-Fortuna-Costa-Rica", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Nayara Tented Camp", "city": "La Fortuna", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/nayara-tented-camp-la-fortuna-arenal-costa-rica", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 4}, "多明尼加": {"en": "Dominican Republic", "hotels": [{"name": "Rental Escapes (select villas)", "city": "Punta Cana / Cap Cana", "period": "2026-09-01 to 2026-10-31 (指定別墅)", "plan": "Stay 7 nights and pay only 5 in the Dominican Republic", "url": "https://www.virtuoso.com/promotions/18405642/stay-7-nights-and-pay-only-5-in-the-dominican-republic", "desc": "Book 7 nights and pay for only 5 (2 nights free) in select villas in Punta Cana or Cap Cana, Dominican Republic through Rental Escapes (Travel Weekly & Travel Pulse Best Villa Rental Company). Valid travel: Sep 1 - Oct 31, 2026. Applicable to designated villas only. Contact your Virtuoso advisor or Rental Escapes for details.", "source": "Virtuoso"}], "count": 1}, "格瑞那達": {"en": "Grenada", "hotels": [{"name": "Silversands Grand Anse, Grenada", "city": "Saint George's", "period": "2026年12月15日 (14-day cancellation policy)", "plan": "Stay 3, Pay 2 - Villa Offer", "url": "https://www.virtuoso.com/promotions/18369316/stay-3-pay-2-villa-offer", "desc": "Book a villa directly and get the 3rd night free at Silversands Grand Anse, Grenada. Includes daily breakfast. Villa bookings only. 14-day cancellation policy. Blackout dates may apply. Luxe resort on a lesser-known island with pristine beaches, Caribbean's longest infinity pool, two farm-to-table restaurants, and local wellness rituals. Valid until Dec 15, 2026.", "source": "Virtuoso"}, {"name": "Silversands Grand Anse, Grenada", "city": "Saint George's", "period": "2027年1月9日 (含停絶日期)", "plan": "Stay 3, Pay 2 Offer", "url": "https://www.virtuoso.com/promotions/18369285/stay-3-pay-2-offer", "desc": "Stay 3 nights and get every 3rd night free (stackable - the longer you stay, the more free nights you earn) at Silversands Grand Anse, Grenada. Applicable to all room categories. Includes daily breakfast for all guests. Blackout dates may apply. New bookings only. Valid until Jan 9, 2027.", "source": "Virtuoso"}, {"name": "Silversands Beach House Grenada", "city": "St Georges", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Silversands-Beach-House-Grenada-West-Indies", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Silversands Grand Anse", "city": "St. George's", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Silversands-Grenada-St-Georges-Grenada", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 4}, "墨西哥": {"en": "Mexico", "hotels": [{"name": "Solaz, a Luxury Collection Resort Los Cabos", "city": "San Jose del Cabo", "period": "2026-12-19 to 2027-01-03 (min 5 nights; 第6、8晰免費)", "plan": "Festive Promotion: 6th & 7th Night on Us", "url": "https://www.virtuoso.com/promotions/18481827/festive-promotion-6th-7th-night-on-us", "desc": "Festive offer: Stay 7 nights and pay for 5 (6th & 7th nights free) at Solaz, a Luxury Collection Resort Los Cabos. Min 5 nights. Includes all Virtuoso benefits. Between Cabo San Lucas and San Jose del Cabo. 5 restaurants, 5 bars, 145 rooms with 400+ artworks by Cesar Lopez-Negrete. Sustainable resort with 53,000+ sqm of green space. Valid Dec 19, 2026 - Jan 3, 2027.", "source": "Virtuoso"}, {"name": "Marquis Reforma Hotel & Spa", "city": "Mexico City", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Marquis-Reforma-Hotel-Spa-Mexico-City-Mexico", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Marquis Reforma Hotel & Spa", "city": "Mexico City", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Marquis-Reforma-Hotel-Spa-Mexico-City-Mexico", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Paradero Todos Santos", "city": "La Paz", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Paradero-Todos-Santos-Cabo-San-Lucas-Mexico", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Paradero Todos Santos", "city": "La Paz", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Paradero-Todos-Santos-Cabo-San-Lucas-Mexico", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Paradisus Los Cabos All Inclusive Adults Only", "city": "San Jose del Cabo", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Paradisus-Los-Cabos-All-Inclusive-Adults-Only-San-Jose-Baja-California-Sur-Mexico", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 6}, "巴拿馬": {"en": "Panama", "hotels": [{"name": "Nayara Bocas del Toro", "city": "Bocas Del Toro", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/nayara-bocas-del-toro-bocas-del-toro-panama", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 1}, "聖巴泰勒米": {"en": "Saint Barthelemy", "hotels": [{"name": "Le Barth Villas", "city": "Gustavia", "period": "2026-06-01 to 2026-08-20 and 2026-10-22 to 2026-10-31 (預訂截至2026-10-17)", "plan": "This Summer, Stay Longer, Pay Less in Villas Aqua & Bleu", "url": "https://www.virtuoso.com/virtuosoexclusivepromotions/18119723/this-summer-stay-longer-pay-less-in-villas-aqua-bleu", "desc": "Stay 7 nights and pay for 6 (1 night free) at Le Barth Villas (Villas Aqua & Bleu), Saint Barthelemy. Includes: unlimited access to Le Barthelemy Hotel & Spa facilities, daily beach buffet breakfast at Amis St. Barth or continental breakfast in villa, reserved beach chairs, water sports, Le Fitness, Le Spa La Mer (hammam, sauna, Nordic bath, tea room), welcome kit, concierge & butler. Virtuoso: one 2-hr sunset cruise or Abyss dinner (up to USD 100), confirmed early 10am check-in and 5pm late check-out.", "source": "Virtuoso"}], "count": 1}, "特克斯和凱科斯群島": {"en": "Turks And Caicos Islands", "hotels": [{"name": "Grace Bay Club", "city": "Providenciales", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Grace-Bay-Club-Providenciales-Turks-And-Caicos-Islands", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Rock House", "city": "Providenciales", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Rock-House-Providenciales-Turks-And-Caicos-Islands", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}, "美國": {"en": "United States", "hotels": [{"name": "Bardessono Hotel & Spa", "city": "Yountville", "period": "2026年8月31日 (含停絶日期)", "plan": "Stay 2 Nights and Get the Third Night on us!", "url": "https://www.virtuoso.com/promotions/18481546/stay-2-nights-and-get-the-third-night-on-us", "desc": "Book 2 nights and get the 3rd night free at Bardessono Hotel & Spa in Yountville, Napa Valley (LEED-certified luxury hotel). Subject to availability; cannot be combined with other offers. Virtuoso benefits apply. Walking distance to several wineries, complimentary bicycles. Lucy restaurant, spa, and Yountville's dining and shopping. Valid until Aug 31, 2026.", "source": "Virtuoso"}, {"name": "Fairmont San Francisco", "city": "San Francisco", "period": "需於飯店頁面確認", "plan": "Buy 3 Nights, Get the 4th Night Free", "url": "https://www.virtuoso.com/promotions/15573989/buy-3-nights-get-the-4th-night-free", "desc": "Enjoy our Stay Three Nights and Get the Fourth Night Free. Offers are subject to availability on selected dates and all room categories subject to availability and are exclusive to reservations booked at Virtuoso rates. Offers are not valid for group bookings and are not combinable with any other promotion.", "source": "Virtuoso"}, {"name": "Four Seasons Hotel Los Angeles at Beverly Hills", "city": "Los Angeles", "period": "2026年12月27日 (min 4 nights, max 30 nights)", "plan": "STAY LONGER - FOURTH NIGHT FREE", "url": "https://www.virtuoso.com/promotions/16770966/stay-longer-fourth-night-free", "desc": "Book 3 consecutive nights and receive the 4th night free at Four Seasons Hotel Los Angeles at Beverly Hills. Min 4 nights; max 30 nights. Free nights must be used consecutively. Best available rate basis. Subject to availability and blackout dates. Cannot be combined with other offers or contracts. Pool, Culina Ristorante (award-winning Italian), spa and wellness rooms. Valid until Dec 27, 2026.", "source": "Virtuoso"}, {"name": "Halekulani", "city": "Honolulu", "period": "Travel: 2026-01-03 to 2026-12-21; Book: 2026-03-01 to 2026-12-17", "plan": "Complimentary Fourth Night - Halekulani Heavenly Indulgence", "url": "https://www.virtuoso.com/promotions/18109463/complimentary-fourth-night-halekulani-heavenly-indulgence", "desc": "Pay 3 nights and stay 4 - the 4th night is complimentary at Halekulani (Waikiki Beach, Honolulu). Min 4-night stay. Applicable: Ocean View, Oceanfront, Diamond Head Oceanfront, Diamond Head Oceanfront Superior (subject to availability). Includes: welcome amenity, 'For You Everything' free access to top Oahu art & cultural venues, free Wi-Fi. No resort fee. Full prepayment; non-refundable. Book: Mar 1 - Dec 17, 2026; Travel: Jan 3 - Dec 21, 2026. Virtuoso: room upgrade, daily breakfast, USD 100-200 credit.", "source": "Virtuoso"}, {"name": "The Times Square EDITION", "city": "New York City", "period": "2026-08-01 to 2026-09-07", "plan": "Stay 3, Pay 2 (Guest Rooms)", "url": "https://www.virtuoso.com/promotions/18365742/stay-3-pay-2-guest-rooms", "desc": "Stay 3+ nights and receive every 3rd night complimentary (automatically deducted at checkout) at The Times Square EDITION, Manhattan. Applicable to standard guest rooms only. 452 rooms, 4 restaurants by Michelin-starred chef John Fraser, advanced fitness center with outdoor wellness terrace. Valid travel dates: Aug 1 - Sep 7, 2026.", "source": "Virtuoso"}, {"name": "Waldorf Astoria New York", "city": "New York City", "period": "2026-07-20 to 2026-09-20", "plan": "Stay 3 Pay 2", "url": "https://www.virtuoso.com/promotions/18384075/stay-3-pay-2", "desc": "Summer special offer: stay 3 nights and pay for only 2 nights at the Waldorf Astoria New York, the landmark Art Deco hotel fully renovated with design by Pierre-Yves Rochon. Includes Virtuoso benefits. Valid travel dates: Jul 20 - Sep 20, 2026.", "source": "Virtuoso"}, {"name": "Waldorf Astoria New York", "city": "New York City", "period": "有效期至 2026 年 9 月 16 日止", "plan": "Stay 3 pay 2", "url": "https://www.virtuoso.com/promotions/18238872/stay-3-pay-2", "desc": "Special offer: stay 3 nights and pay for only 2 at Waldorf Astoria New York. Includes Virtuoso benefits. Valid now through Sep 16, 2026. The iconic Art Deco landmark hotel features 375 rooms and suites, 30,000 sq ft spa, Peacock Alley restaurant, and Cole Porter's piano among restored historic artifacts.", "source": "Virtuoso"}, {"name": "Acqualina Resort & Residences on the Beach", "city": "Sunny Isles Beach", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Acqualina-Resort-and-Residences-on-the-Beach-Sunny-Isles-Beach-FL", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "El Encanto", "city": "Santa Barbara", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/El-Encanto-Santa-Barbara-United-States", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Hotel Bardo Savannah", "city": "Savannah", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/hotel-bardo-savannah-savannah-usa", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Malibu Beach Inn", "city": "Malibu", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Malibu-Beach-Inn-Malibu-CA", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Malibu Beach Inn", "city": "Malibu", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Malibu-Beach-Inn-Malibu-CA", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Parker Palm Springs", "city": "Palm Springs", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Parker-Palm-Springs-CA-USA", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Parker Palm Springs", "city": "Palm Springs", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Parker-Palm-Springs-CA-USA", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Brazilian Court Hotel", "city": "Palm Beach", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/The-Brazilian-Court-Hotel-Palm-Beach-FL", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Brazilian Court Hotel", "city": "Palm Beach", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-Brazilian-Court-Hotel-Palm-Beach-FL", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Fifth Avenue Hotel", "city": "New York", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/The-Fifth-Avenue-Hotel-New-York-NY", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Fifth Avenue Hotel", "city": "New York", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-Fifth-Avenue-Hotel-New-York-NY", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Huntington Hotel", "city": "San Francisco", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Huntington-Hotel-San-Francisco-United-States", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Joule", "city": "Dallas", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/The-Joule-Dallas-TX", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Lowell", "city": "New York", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/The-Lowell-New-York-NY", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Lowell", "city": "New York", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/The-Lowell-New-York-NY", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Newbury Boston", "city": "Boston", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Newbury-Boston-MA", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "The Newbury Boston", "city": "Boston", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Newbury-Boston-MA", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 24}, "委內瑞拉": {"en": "Venezuela", "hotels": [{"name": "Cayena-Caracas", "city": "Caracas", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Cayena-Caracas-Caracas-Venezuela", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 1}}, "total": 57}, "大洋洲": {"countries": {"澳洲": {"en": "Australia", "hotels": [{"name": "InterContinental Hayman Great Barrier Reef", "city": "Hayman Island", "period": "2025-07-01 to 2026-06-30", "plan": "One Night On Us (Stay 3/Pay 2) offer", "url": "https://www.virtuoso.com/promotions/18211260/one-night-on-us-stay-3-pay-2-offer", "desc": "Stay 3 nights and InterContinental Hayman Island (Great Barrier Reef) pays for 1 night. Book: Jul 1, 2025 - Jun 30, 2026; Travel: Jul 1, 2025 - Jun 30, 2026. Bookable via GDS or luxury.hayman@ihg.com. All standard Virtuoso benefits apply, 10% commissionable. Blackout dates apply. Cannot be combined with other promotions. Arrive by yacht, private plane, or helicopter; enjoy the Great Barrier Reef, spa, and Aqua pool bar.", "source": "Virtuoso"}, {"name": "InterContinental Sydney", "city": "Sydney", "period": "2025-07-01 to 2026-06-30", "plan": "One Night on Us (Stay 4/Pay 3)", "url": "https://www.virtuoso.com/promotions/18201221/one-night-on-us-stay-4-pay-3", "desc": "Stay 4 nights and InterContinental Sydney pays for 1 night. Book/stay: Jul 1, 2025 - Jun 30, 2026. Via GDS or luxury.sydney@ihg.com. All Virtuoso benefits apply. 10% commissionable. Blackout dates apply. In the restored 1851 Treasury Building at Circular Quay, with views of Sydney Opera House and Harbour Bridge. 509 rooms incl. 28 suites, ASTER rooftop bar, InterContinental Club Lounge. AUD 1.2B renovation completed.", "source": "Virtuoso"}, {"name": "Shangri-La The Marina Cairns", "city": "Cairns", "period": "有效期至 2026 年 8 月 31 日止", "plan": "Horizons Beyond the Reef - Stay 4 & Pay 3", "url": "https://www.virtuoso.com/promotions/18183003/horizons-beyond-the-reef-stay-4-pay-3", "desc": "Book 3 nights and get the 4th night free at Shangri-La The Marina Cairns, your base for exploring tropical North Queensland. Adjacent to the Reef Fleet Terminal (daily departures to UNESCO World Heritage Great Barrier Reef), surrounded by rainforests. The Backyard restaurant with fresh local produce, garden pool. Valid until Aug 31, 2026.", "source": "Virtuoso"}, {"name": "Sofitel Sydney Darling Harbour", "city": "Sydney", "period": "有效期至 2027 年 6 月 30 日止", "plan": "Stay 3 Pay 2 at Sofitel Sydney Darling Harbour", "url": "https://www.virtuoso.com/promotions/18489178/stay-3-pay-2-at-sofitel-sydney-darling-harbour", "desc": "Stay 3 nights and pay for 2 at Sofitel Sydney Darling Harbour, featuring iconic French elegance with stunning Darling Harbour views. Available now through Jun 30, 2027. Includes Virtuoso benefits. Upgrade to Club floor to access Club Millesime lounge on level 35. The Champagne Bar offers 30+ vintage champagnes; Atelier restaurant holds two chef's hat award.", "source": "Virtuoso"}], "count": 4}, "斐濟": {"en": "Fiji", "hotels": [{"name": "Jean-Michel Cousteau Resort Fiji", "city": "Savusavu", "period": "2026-04-01 to 2026-06-19 (依供應)", "plan": "Stay 7 Pay 5", "url": "https://www.virtuoso.com/promotions/18391550/stay-7-pay-5", "desc": "Stay 7 nights and pay for 5 (2 nights free) at Jean-Michel Cousteau Resort Fiji (all-inclusive, award-winning eco-resort). Applicable to all Bure types. All-inclusive rate: meals, daily activities, 4 off-site excursions/week, marine biologist-led snorkeling, snorkel gear, tennis, paddleboard, kayak, Hobie cat, children's Club Bula, evening entertainment. 2 children under 13 free with 2 adults. Valid Apr 1 - Jun 19, 2026.", "source": "Virtuoso"}, {"name": "Kokomo Private Island Fiji", "city": "Yaukuve Levu Island", "period": "有效期至 2026 年 12 月 18 日止", "plan": "Stay 5, Pay 4", "url": "https://www.virtuoso.com/promotions/18124003/stay-5-pay-4", "desc": "Book 4 consecutive nights in a beachfront villa or luxury residence and receive the 5th night free at Kokomo Private Island Fiji (Great Astrolabe Reef). Includes: choice of 45-min spa treatment or intro scuba dive. New bookings only. Subject to availability and blackout dates. Cannot be combined with other offers. Top diving/snorkeling, waterfalls hiking, Yakaviti Spa, coral restoration with marine biologist. Valid until Dec 18, 2026.", "source": "Virtuoso"}], "count": 2}, "法屬玻里尼西亞": {"en": "French Polynesia", "hotels": [{"name": "The Brando", "city": "Arue (Tetiaroa)", "period": "有效期至 2027 年 3 月 31 日 (最少住 4 晚，可累積：住 8 付 6、住 12 付 9)", "plan": "Brando 4th Night FREE & FREE FLIGHTS to/from Tahiti and Brando", "url": "https://www.virtuoso.com/promotions/16852765/brando-4th-night-free-free-flights-to-from-tahiti-and-brando", "desc": "Stay 3 nights and get the 4th night free (stackable: stay 8 pay 6, stay 12 pay 9) at The Brando private island resort, French Polynesia. Includes FREE round-trip flights Tahiti-Brando. Applicable to all villas: 1BR Pool Villa, 1BR Family Pool Villa, 2BR Villa, 3BR Villa, Teremoana 4BR Pool Residence. All-inclusive or villa+breakfast options available. LEED Platinum certified, first in French Polynesia. Valid until Mar 31, 2027.", "source": "Virtuoso"}], "count": 1}, "紐西蘭": {"en": "New Zealand", "hotels": [{"name": "Minaret Station Alpine Lodge", "city": "Wanaka", "period": "2026-06-01 to 2026-10-01 (new bookings by Sep 30, 2026)", "plan": "Minaret Station Stay 3 Pay 2 Winter 2026 Offer", "url": "https://www.virtuoso.com/promotions/18396998/minaret-station-stay-3-pay-2-winter-2026-offer", "desc": "Stay 3 nights and get the 3rd night free at Minaret Station Alpine Lodge (all-inclusive). Package includes: helicopter transfers for 2 from Wanaka or Queenstown, private guided alpine hut hiking, evening canapes & pre-dinner drinks, multi-course dinners with wine selection, full daily breakfasts, daily lunches, beverages including minibar. Valid Jun 1 - Oct 1, 2026. New bookings by Sep 30, 2026. Not combinable with other offers.", "source": "Virtuoso"}], "count": 1}}, "total": 8}, "中東非洲": {"countries": {"波札那": {"en": "Botswana", "hotels": [{"name": "Xigera Safari Lodge", "city": "Moremi Game Reserve", "period": "2028年1月5日 (不適用旺季: Jun-Sep, Dec 20-Jan 5)", "plan": "Stay 4 Nights and Pay for 3", "url": "https://www.virtuoso.com/promotions/18280704/stay-4-nights-and-pay-for-3", "desc": "Stay 4 nights and get 1 night free at Xigera Safari Lodge (Moremi Game Reserve, Botswana's Okavango Delta). Stackable: stay 8 pay 6, stay 12 pay 8, etc. Min 4 nights. Not valid in peak season (Jun 1-Sep 30; Dec 20-Jan 5). Not for exclusive-use bookings. Cannot be combined with other promotions. Valid until Jan 5, 2028. No fixed schedule: yoga at sunrise, leopard tracking, mokoro canoeing, bush walks, stargazing in a baobab treehouse.", "source": "Virtuoso"}], "count": 1}, "馬爾地夫": {"en": "Maldives", "hotels": [{"name": "JOALI BEING", "city": "Male", "period": "2026-10-11 to 2026-12-20 (預訂截至2026-11-30; min 4 nights)", "plan": "Well-Living Island Fall Escape - Stay Pay Offer", "url": "https://www.virtuoso.com/promotions/18373377/well-living-island-fall-escape-stay-pay-offer", "desc": "Fall escape: Stay 4 pay 3, or stay 7 pay 5 at JOALI BEING (pioneering wellbeing island, Raa Atoll Maldives). Includes: daily breakfast at FLOW, free tea ceremony experience. Virtuoso: USD 250 wellness credit, room upgrade, early check-in/late check-out, Wi-Fi, personalized welcome. Min 4 consecutive nights. Book by Nov 30, 2026; stay Oct 11 - Dec 20, 2026.", "source": "Virtuoso"}, {"name": "JOALI BEING", "city": "Male", "period": "2026-05-11 to 2026-10-10 (預訂截至2026-09-30; min 4 nights)", "plan": "Weightless Spring & Summer - Stay Pay Offer with Half Board", "url": "https://www.virtuoso.com/promotions/18373376/weightless-spring-summer-stay-pay-offer-with-half-board", "desc": "Spring/Summer offer: Stay 4 pay 3, or stay 7 pay 5 at JOALI BEING (pioneering wellbeing island). Free half-board upgrade for longer stays. Includes daily breakfast, free tea ceremony. Virtuoso: USD 250 wellness credit, room upgrade, early check-in/late check-out, Wi-Fi. Min 4 consecutive nights. Book by Sep 30, 2026; stay May 11 - Oct 10, 2026.", "source": "Virtuoso"}, {"name": "JOALI Maldives", "city": "Raa Atoll", "period": "2026-05-11 to 2026-10-10 (預訂截至2026-09-30; min 4 nights)", "plan": "Joyful Maldives Spring & Summer - Stay Pay Offer with Half Board", "url": "https://www.virtuoso.com/promotions/18376754/joyful-maldives-spring-summer-stay-pay-offer-with-half-board", "desc": "Stay 4 pay 3, or stay 7 pay 5 at JOALI Maldives (world's first luxury immersive art resort). Free half-board upgrade for longer stays (booked by May 31, 2026). Children (6-11) free for applicable bookings. Daily breakfast + free half-board upgrade, USD 150 F&B credit, 30-min spa for 2, welcome champagne & fruit, room upgrade, early check-in/late check-out. Min 4 consecutive nights. Valid May 11 - Oct 10, 2026.", "source": "Virtuoso"}, {"name": "JOALI Maldives", "city": "Raa Atoll", "period": "2026-10-11 to 2026-12-20 (預訂截至2026-11-30; min 4 nights)", "plan": "Island of Joy Fall Escape - Stay Pay Offer", "url": "https://www.virtuoso.com/promotions/18402608/island-of-joy-fall-escape-stay-pay-offer", "desc": "Fall escape: Stay 4 pay 3, or stay 7 pay 5 at JOALI Maldives. Includes: daily breakfast at Vandhoo, free art workshop with resident artist per stay. Virtuoso: USD 150 F&B credit, 30-min spa for 2, welcome champagne & fruit, upgrade. Min 4 consecutive nights. Book by Nov 30, 2026; stay Oct 11 - Dec 20, 2026. Contact reservations.jomv@joali.com.", "source": "Virtuoso"}], "count": 4}, "摩洛哥": {"en": "Morocco", "hotels": [{"name": "Royal Mansour Casablanca", "city": "Casablanca", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Royal-Mansour-Casablanca-Casablanca-Morocco", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}, {"name": "Royal Mansour Marrakech", "city": "Marrakech", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/Royal-Mansour-Marrakech-Marrakech-Morocco", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}, "塞席爾": {"en": "Seychelles", "hotels": [{"name": "Mango House Seychelles, LXR Hotels & Resorts", "city": "Victoria", "period": "Check-in by 2026-12-23; min 2 nights", "plan": "Stay 3 Pay 2 Nights at your Oceanfront Retreat", "url": "https://www.virtuoso.com/promotions/18477178/stay-3-pay-2-nights-at-your-oceanfront-retreat", "desc": "Book 2 nights at Mango House Seychelles (LXR Hotels & Resorts) and receive 1 extra night complimentary. Applicable to all room types and suites. Check-in by Dec 23, 2026; minimum 2-night stay required. Cannot be combined with other promotions. Located on the pristine southern coast of Mahe Island with 41 oceanfront rooms and suites, multiple dining options, and Ambre Spa.", "source": "Virtuoso"}], "count": 1}, "南非": {"en": "South Africa", "hotels": [{"name": "Royal Malewane", "city": "Hoedspruit", "period": "有效期至 2026 年 12 月 19 日止", "plan": "Stay 6, Pay 5 at Royal Malewane Safari Lodges | The Royal Offer", "url": "https://www.virtuoso.com/promotions/18107167/stay-6-pay-5-at-royal-malewane-safari-lodges-the-royal-offer", "desc": "Stay 6 nights and pay for 5 at Royal Malewane Safari Lodge (Greater Kruger National Park, South Africa). Combinable with other Royal Portfolio properties: The Silo Hotel Cape Town, La Residence Franschhoek, Birkenhead House Hermanus. Includes Virtuoso benefits. Contact reservations@trp.travel. Africa's top guiding team, all FGASA highest-qualification certified. Valid until Dec 19, 2026.", "source": "Virtuoso"}, {"name": "Steyn City Hotel by Saxon", "city": "Johannesburg", "period": "需於訂房流程確認", "plan": "Stay for 3 Pay for 2", "url": "https://www.lhw.com/hotel/Steyn-City-Hotel-by-Saxon-Johannesburg-South-Africa", "desc": "Linger longer and save. Stay 3 consecutive nights and pay for 2. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 2}, "坦尚尼亞": {"en": "Tanzania", "hotels": [{"name": "NgoroNgoro Lodge, Member of Melia Collection", "city": "NgoroNgoro", "period": "需於訂房流程確認", "plan": "Stay for 4 Pay for 3", "url": "https://www.lhw.com/hotel/NgoroNgoro-Lodge-Member-of-Melia-Collection-NgoroNgoro-Tanzania", "desc": "Linger longer and save. Stay 4 consecutive nights and pay for 3. Subject to availability. Blackout dates may apply. 詳細條款於訂房流程中查看。", "source": "Leading Hotels"}], "count": 1}, "阿拉伯聯合大公國": {"en": "United Arab Emirates", "hotels": [{"name": "Delano Dubai", "city": "Dubai", "period": "有效期至 2026 年 9 月 30 日止", "plan": "Stay Pay Offer - Stay 3, Pay 2", "url": "https://www.virtuoso.com/promotions/18067546/stay-pay-offer", "desc": "Book any room or suite category and stay 3 nights paying only for 2 at Delano Dubai (Philippe Starck design on Bluewaters Island). 251 rooms; many suites with private gardens and plunge pools. Exclusive beach access, sea-view pools, Roman bath, spa. Tutto Passa restaurant (seafood & Amalfi Coast cuisine). Valid until Sep 30, 2026.", "source": "Virtuoso"}, {"name": "Jumeirah Burj Al Arab", "city": "Dubai", "period": "2026年10月17日 (含停絶日期)", "plan": "Stay 4 Pay 3 Nights | Jumeirah Burj Al Arab", "url": "https://www.virtuoso.com/promotions/16701033/stay-4-pay-3-nights-jumeirah-burj-al-arab", "desc": "Stay 4 nights and pay for 3 at Jumeirah Burj Al Arab (321m iconic Dubai sail-shaped 5-star hotel on a private island). Valid Oct 17, 2025 - Oct 17, 2026. Combinable with Virtuoso benefits and preferences. Cannot be combined with other promotions. New bookings only. Blackout dates apply. All-suite hotel known for its ultra-luxury and personalized service.", "source": "Virtuoso"}, {"name": "Jumeirah Marsa Al Arab Resort & Residences", "city": "Dubai", "period": "2026-06-01 to 2026-09-30 (預訂截至2026-01-31)", "plan": "Stay 4 Pay 3", "url": "https://www.virtuoso.com/promotions/18279087/stay-4-pay-3", "desc": "Stay 4 nights and pay for 3 at Jumeirah Marsa Al Arab Resort & Residences Dubai (superyacht-inspired design). 300 rooms and 86 suites with sea-view terraces. Book by Jan 31, 2026; valid Jun 1 - Sep 30, 2026. Combinable with Virtuoso and preferences. Cannot be combined with other promotions. New bookings only, not for groups.", "source": "Virtuoso"}, {"name": "One&Only The Palm", "city": "Dubai", "period": "Stay 5 Pay 4: 2026-04-10 to 2026-12-24 (停絶 Oct 20 - Nov 10)", "plan": "A Night on Us: Stay 5, Pay for 4 at One&Only The Palm", "url": "https://www.virtuoso.com/promotions/18302012/a-night-on-us-stay-5-pay-for-4-at-oneonly-the-palm", "desc": "Stay 5 nights and pay for 4 at One&Only The Palm Dubai (most private beach resort in Dubai). Applicable to Ocean View Superior rooms, non-pool suites and villas. Apr 10 - Dec 24, 2026 (blackout: Oct 20-Nov 10). Virtuoso: 15% commission, daily breakfast for 2 at Zest, welcome amenity, early check-in/late check-out, room upgrade, USD 100 resort credit (F&B and Guerlain Spa excl. retail). Contact reservations@oneandonlythepalm.com.", "source": "Virtuoso"}, {"name": "Raffles Dubai", "city": "Dubai", "period": "有效期至 2026 年 6 月 30 日止", "plan": "Stay 4 pay 3 at Raffles Dubai", "url": "https://www.virtuoso.com/promotions/18406355/stay-4-pay-3-at-raffles-dubai", "desc": "Stay 4 nights and pay for 3 at iconic Raffles Dubai. 10 minutes from Dubai airport, Dubai Downtown and Burj Khalifa. Connected to Wafi Mall and Khan Murjan Souk. Largest rooms in the city (all 70+ sqm from), each with private balcony and Dubai skyline views. 7 F&B outlets, Raffles Spa with 6 treatment rooms. TripAdvisor Top 10 worldwide hotel. Valid until Jun 30, 2026.", "source": "Virtuoso"}, {"name": "Raffles The Palm Dubai", "city": "Dubai", "period": "2026年5月31日 (預訂期2026-03-16 至 05-31)", "plan": "Stay 3, Pay 2 This Winter at the Palace", "url": "https://www.virtuoso.com/promotions/18405552/stay-3-pay-2-this-winter-at-the-palace", "desc": "Get the 3rd night free (Stay 3 Pay 2) at Raffles The Palm Dubai. Applicable to all room types. Book: Mar 16 - May 31, 2026. Blackout dates apply. Virtuoso inclusions: complimentary breakfast for 2 adults and 2 children under 12, room upgrade subject to availability, early check-in/late check-out, USD 100 resort shop credit, welcome amenity, VIP status. 389 rooms, Swarovski chandeliers, 23-treatment-room spa, largest indoor pool in Middle East.", "source": "Virtuoso"}], "count": 6}}, "total": 17}}, "meta": {"updated": "2026 年 4 月 28 日", "total": 295, "subtitle": "艾旅嚴選 Virtuoso 與 Leading Hotels of the World 全球免費住宿夜禮遇"}};
+
+const REGION_EN = {
+  '亞洲': 'Asia',
+  '歐洲': 'Europe', 
+  '美洲': 'Americas',
+  '大洋洲': 'Oceania',
+  '中東非洲': 'Middle East & Africa'
+};
+const REGION_QUOTE = {
+  '亞洲': '從關西的禪意到南洋的潮汐，亞洲的奢華從不喧嘩，它沉澱在每一處安排周到的細節裡。',
+  '歐洲': '老建築裡的新生活，是歐洲百年酒店最迷人的對位。一晚住下，便讀懂了這座城。',
+  '美洲': '從加州的陽光到加勒比海的私人沙灘，美洲的豪華是寬闊、自在、不受拘束的。',
+  '大洋洲': '南半球的天空格外清亮。在這裡，奢華與自然的距離，只隔一扇向海的窗。',
+  '中東非洲': '從沙漠中的綠洲宮殿，到印度洋上的私人島嶼，這裡的款待，是為了那些早已看過世界的人。'
+};
+const REGION_ORDER = ['亞洲', '歐洲', '美洲', '大洋洲', '中東非洲'];
+
+// Build pages array
+const pages = [];
+
+// Page 0: Cover
+pages.push({ type: 'cover' });
+
+// Pages 1, 2: Featured spotlights
+DATA.featured.forEach((f, i) => {
+  pages.push({ type: 'featured', data: f, index: i });
+});
+
+// Page 3: TOC
+pages.push({ type: 'toc' });
+
+// For each region: intro + listing pages
+REGION_ORDER.forEach((region) => {
+  pages.push({ type: 'region-intro', region: region });
+  pages.push({ type: 'region-listing', region: region });
+});
+
+let currentPage = 0;
+let isFlipping = false;
+
+function escapeHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function sourceBadge(source) {
+  if (source === 'Virtuoso') {
+    return '<span class="source-badge source-virtuoso">Virtuoso</span>';
+  } else {
+    return '<span class="source-badge source-leading">Leading Hotels</span>';
+  }
+}
+
+function renderCover() {
+  return `
+    <div class="page cover">
+      <div class="cover-inner">
+        <div class="cover-top">
+          <div class="cover-eyebrow">艾旅 · LIVEWELL · 全球免費住宿夜禮遇</div>
+          <div class="cover-brand">EXCLUSIVE FREE NIGHT EDIT</div>
+        </div>
+        <div class="cover-center">
+          <div class="cover-zh">旅遊優惠<br>精選。</div>
+          <div class="cover-en">Hotel Offers<br>Collection 2026.</div>
+          <div class="cover-mark"></div>
+          <div class="cover-tagline">
+            艾旅嚴選全球 ${DATA.meta.total} 間頂級酒店，<br>
+            透過 Virtuoso 與 Leading Hotels of the World 兩大頂奢聯盟，<br>
+            為對生活有要求的你，留下一個多出來的夜晚。
+          </div>
+        </div>
+        <div class="cover-bottom">
+          <div class="cover-meta">
+            VOL. 04 · 2026<br>
+            ${DATA.meta.updated} 更新
+          </div>
+          <div class="cover-partners">
+            Virtuoso<br>
+            Leading Hotels<br>
+            of the World
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderFeatured(f, idx) {
+  const imgHtml = f.img
+    ? `<img class="featured-img" src="${escapeHtml(f.img)}" alt="${escapeHtml(f.name)}" loading="eager" onerror="this.parentNode.innerHTML='<div class=\\'featured-img-fallback\\'></div>'">`
+    : `<div class="featured-img-fallback"></div>`;
+
+  return `
+    <div class="page featured-page">
+      <div class="featured-layout">
+        <div class="featured-img-col">
+          ${imgHtml}
+          <div class="featured-img-overlay"></div>
+          ${f.img_credit ? `<span class="featured-img-credit">${escapeHtml(f.img_credit)}</span>` : ''}
+        </div>
+        <div class="featured-text-col">
+          <div class="featured-eyebrow">本月精選 · Editor's Pick</div>
+          <div class="featured-num">No. 0${idx + 1} / 02 — ${f.region}</div>
+          <div class="featured-tagline">「${escapeHtml(f.tagline)}」</div>
+          <h1 class="featured-name-zh">${escapeHtml(f.name_zh)}</h1>
+          <div class="featured-name-en">${escapeHtml(f.name)}</div>
+          <div class="featured-loc">${escapeHtml(f.city)} · ${escapeHtml(f.country)}</div>
+          <div class="featured-divider"></div>
+          <p class="featured-desc">${escapeHtml(f.desc)}</p>
+          <div class="featured-card">
+            <div class="featured-card-label">免費住宿夜方案</div>
+            <div class="featured-plan">${escapeHtml(f.plan)}</div>
+            <div class="featured-plan-desc">${escapeHtml(f.plan_desc)}</div>
+            <div class="featured-period">適用期間 · ${escapeHtml(f.period)}<br><span style="color:var(--text-tertiary);font-style:italic;">${escapeHtml(f.period_en)}</span></div>
+          </div>
+          <div class="featured-foot">
+            ${sourceBadge(f.source)}
+            <a href="${escapeHtml(f.url)}" target="_blank" class="featured-link">查看完整方案 →</a>
+          </div>
+        </div>
+      </div>
+      <div class="page-footer">
+        <span class="footer-brand">艾旅 LIVEWELL · BESPOKE TRAVEL</span>
+        <span class="footer-page">${String(currentPage + 1).padStart(2,'0')}</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderToc() {
+  let items = '';
+  REGION_ORDER.forEach((r, i) => {
+    const d = DATA.regions[r];
+    const pageNum = pages.findIndex(p => p.type === 'region-intro' && p.region === r) + 1;
+    items += `
+      <div class="toc-item" onclick="goToPage(${pageNum - 1})">
+        <span class="toc-num">0${i+1}</span>
+        <span class="toc-region-zh">${r}</span>
+        <span class="toc-region-en">${REGION_EN[r]}</span>
+        <span class="toc-dots"></span>
+        <span class="toc-meta">${d.total} 間 · ${Object.keys(d.countries).length} 國</span>
+      </div>
+    `;
+  });
+  return `
+    <div class="page">
+      <div class="page-inner">
+        <div class="toc-eyebrow">CONTENTS · 目錄</div>
+        <h1 class="toc-title">五大區域 · 精選一覽</h1>
+        <div class="toc-en">Browse by Region</div>
+        <div class="toc-divider"></div>
+        <div class="toc-list">${items}</div>
+        <div style="margin-top: 2.4rem; padding-top: 1.4rem; border-top: 0.5px solid var(--border);">
+          <div class="sans" style="font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0.6rem;">PARTNERS · 合作夥伴</div>
+          <div style="display:flex; gap: 1.2rem; flex-wrap: wrap;">
+            <span class="source-badge source-virtuoso">Virtuoso</span>
+            <span class="source-badge source-leading">Leading Hotels</span>
+          </div>
+          <p class="sans" style="font-size: 12px; color: var(--text-secondary); margin-top: 0.9rem; line-height: 1.7;">
+            每一筆優惠皆標註來源聯盟，並附上原始查詢連結。<br>
+            欲預訂任一方案，請與您的艾旅旅遊創造師聯繫。
+          </p>
+        </div>
+      </div>
+      <div class="page-footer">
+        <span class="footer-brand">艾旅 LIVEWELL · BESPOKE TRAVEL</span>
+        <span class="footer-page">${String(currentPage + 1).padStart(2,'0')}</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderRegionIntro(region) {
+  const d = DATA.regions[region];
+  const idx = REGION_ORDER.indexOf(region);
+  const countriesList = Object.entries(d.countries)
+    .sort((a,b) => b[1].count - a[1].count)
+    .map(([zh, c]) => `${zh}<span style="color:var(--text-tertiary); font-size:11px; margin-left:3px;">${c.count}</span>`)
+    .join('　·　');
+  
+  return `
+    <div class="page region-intro-page">
+      <div class="region-intro-inner">
+        <div class="region-intro-num">PART 0${idx + 1} / 05 · CHAPTER ${String.fromCharCode(65 + idx)}</div>
+        <h1 class="region-intro-zh">${region}</h1>
+        <div class="region-intro-en">${REGION_EN[region]}</div>
+        <div class="region-intro-mark"></div>
+        <div class="region-intro-stats">
+          <div class="stat-item">
+            <div class="stat-num">${d.total}</div>
+            <div class="stat-label">嚴選酒店</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">${Object.keys(d.countries).length}</div>
+            <div class="stat-label">國家／地區</div>
+          </div>
+        </div>
+        <div class="region-intro-countries">${countriesList}</div>
+        <div class="region-intro-quote">${REGION_QUOTE[region]}</div>
+      </div>
+      <div class="page-footer">
+        <span class="footer-brand">艾旅 LIVEWELL · BESPOKE TRAVEL</span>
+        <span class="footer-page">${String(currentPage + 1).padStart(2,'0')}</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderHotelCard(h) {
+  return `
+    <div class="hotel-card">
+      <div class="hotel-top">
+        <div>
+          <div class="hotel-name">${escapeHtml(h.name)}</div>
+          <div class="hotel-city">${escapeHtml(h.city)}</div>
+        </div>
+        ${sourceBadge(h.source)}
+      </div>
+      <div class="hotel-plan">◆ ${escapeHtml(h.plan)}</div>
+      ${h.period ? `<div class="hotel-period">適用期間 · ${escapeHtml(h.period)}</div>` : ''}
+      ${h.desc ? `<div class="hotel-desc">${escapeHtml(h.desc)}</div>` : ''}
+      <div class="hotel-foot">
+        ${h.url ? `<a href="${escapeHtml(h.url)}" target="_blank" class="hotel-link">查看完整方案 →</a>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+let currentRegionCountry = {};
+
+function renderRegionListing(region) {
+  const d = DATA.regions[region];
+  const countries = Object.entries(d.countries).sort((a,b) => b[1].count - a[1].count);
+  const activeCountry = currentRegionCountry[region] || countries[0][0];
+  
+  let pills = '';
+  countries.forEach(([zh, c]) => {
+    pills += `<button class="country-pill ${zh === activeCountry ? 'active' : ''}" data-region="${escapeHtml(region)}" data-country="${escapeHtml(zh)}">${zh}<span class="pill-count">${c.count}</span></button>`;
+  });
+  
+  const activeData = d.countries[activeCountry];
+  let cards = '';
+  activeData.hotels.forEach(h => { cards += renderHotelCard(h); });
+  
+  return `
+    <div class="page">
+      <div class="page-inner">
+        <div class="listing-header">
+          <div class="listing-eyebrow">PART 0${REGION_ORDER.indexOf(region) + 1} · ${REGION_EN[region]}</div>
+          <div class="listing-title">
+            <span class="listing-zh">${region} · ${activeCountry}</span>
+            <span class="listing-en">${activeData.en}</span>
+            <span class="listing-count">${activeData.count} HOTELS</span>
+          </div>
+        </div>
+        <div class="country-nav">${pills}</div>
+        <div>${cards}</div>
+      </div>
+      <div class="page-footer">
+        <span class="footer-brand">艾旅 LIVEWELL · BESPOKE TRAVEL</span>
+        <span class="footer-page">${String(currentPage + 1).padStart(2,'0')}</span>
+      </div>
+    </div>
+  `;
+}
+
+function setCountry(region, country) {
+  currentRegionCountry[region] = country;
+  // Re-render the listing page in place (no flip animation for sub-nav)
+  const book = document.getElementById('book');
+  const oldPage = book.querySelector('.page.active');
+  if (!oldPage) return;
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = renderRegionListing(region);
+  const newPage = wrapper.firstElementChild;
+  newPage.classList.add('active');
+  oldPage.replaceWith(newPage);
+  // Scroll to top of new page
+  newPage.querySelector('.page-inner').scrollTop = 0;
+}
+
+function renderPage(pageDef) {
+  switch(pageDef.type) {
+    case 'cover': return renderCover();
+    case 'featured': return renderFeatured(pageDef.data, pageDef.index);
+    case 'toc': return renderToc();
+    case 'region-intro': return renderRegionIntro(pageDef.region);
+    case 'region-listing': return renderRegionListing(pageDef.region);
+  }
+  return '';
+}
+
+function showPage(idx, direction) {
+  if (isFlipping) return;
+  if (idx < 0 || idx >= pages.length) return;
+  
+  const book = document.getElementById('book');
+  const oldPage = book.querySelector('.page.active');
+  
+  isFlipping = true;
+  currentPage = idx;
+  
+  const newHtml = renderPage(pages[idx]);
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = newHtml;
+  const newPage = wrapper.firstElementChild;
+  
+  if (oldPage) {
+    if (direction === 'next') {
+      oldPage.classList.add('flipping-out');
+      newPage.classList.add('flipping-in', 'active');
+    } else {
+      oldPage.classList.add('flipping-out-back');
+      newPage.classList.add('flipping-in-back', 'active');
+    }
+    book.appendChild(newPage);
+    
+    setTimeout(() => {
+      if (oldPage.parentNode) oldPage.remove();
+      newPage.classList.remove('flipping-in', 'flipping-in-back');
+      isFlipping = false;
+    }, 600);
+  } else {
+    newPage.classList.add('active');
+    book.appendChild(newPage);
+    isFlipping = false;
+  }
+  
+  updateUI();
+}
+
+function nextPage() {
+  if (currentPage < pages.length - 1) showPage(currentPage + 1, 'next');
+}
+function prevPage() {
+  if (currentPage > 0) showPage(currentPage - 1, 'prev');
+}
+function goToPage(idx) {
+  if (idx === currentPage) return;
+  const direction = idx > currentPage ? 'next' : 'prev';
+  showPage(idx, direction);
+}
+
+function updateUI() {
+  document.getElementById('progress').textContent = `${String(currentPage + 1).padStart(2,'0')} / ${String(pages.length).padStart(2,'0')}`;
+  document.getElementById('prevBtn').disabled = currentPage === 0;
+  document.getElementById('nextBtn').disabled = currentPage === pages.length - 1;
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') nextPage();
+  if (e.key === 'ArrowLeft') prevPage();
+});
+
+// Event delegation for country pills
+document.getElementById('book').addEventListener('click', (e) => {
+  const pill = e.target.closest('.country-pill');
+  if (pill) {
+    setCountry(pill.dataset.region, pill.dataset.country);
+  }
+});
+
+// Init
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('topBar').style.display = 'flex';
+    showPage(0);
+  }, 400);
+});
+</script>
+</body>
+</html>
